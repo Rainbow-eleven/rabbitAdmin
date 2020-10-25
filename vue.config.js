@@ -1,4 +1,7 @@
-// const CompressionPlugin = require("compression-webpack-plugin");
+//引入该插件
+const CompressionWebpackPlugin = require("compression-webpack-plugin");
+// 是否为生产环境
+const isProduction = process.env.NODE_ENV !== "development";
 module.exports = {
   //设置为false以加速生产环境构建
   productionSourceMap: false,
@@ -9,26 +12,21 @@ module.exports = {
       },
     },
   },
-  // configureWebpack: {
-  //   plugins: [
-  //   new CompressionPlugin({
-  //       /* [file]被替换为原始资产文件名。
-  //          [path]替换为原始资产的路径。
-  //          [dir]替换为原始资产的目录。
-  //          [name]被替换为原始资产的文件名。
-  //          [ext]替换为原始资产的扩展名。
-  //          [query]被查询替换。*/
-  //       filename: '[path].gz[query]',
-  //       //压缩算法
-  //       algorithm: 'gzip',
-  //       //匹配文件
-  //       test: /\.js$|\.css$|\.html$/,
-  //       //压缩超过此大小的文件,以字节为单位
-  //       threshold: 10240,
-  //       minRatio: 0.8,
-  //       //删除原始文件只保留压缩后的文件
-  //       deleteOriginalAssets: true
-  //     })
-  //   ]
-  // }
+  configureWebpack: (config) => {
+    // 生产环境相关配置
+    if (isProduction) {
+      //gzip压缩
+      const productionGzipExtensions = ["html", "js", "css"];
+      config.plugins.push(
+        new CompressionWebpackPlugin({
+          filename: "[path].gz[query]",
+          algorithm: "gzip",
+          test: new RegExp("\\.(" + productionGzipExtensions.join("|") + ")$"),
+          threshold: 10240, // 只有大小大于该值的资源会被处理 10240
+          minRatio: 0.8, // 只有压缩率小于这个值的资源才会被处理
+          deleteOriginalAssets: false, // 删除原文件
+        })
+      );
+    }
+  },
 };
