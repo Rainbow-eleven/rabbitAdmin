@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 export interface UserInfo {
-  isLogin: boolean;
+  isLogin?: boolean;
   id?: number;
   account?: string;
   cardNo?: string;
@@ -15,6 +15,13 @@ export interface UserInfo {
 }
 interface SlotProp {
   customRender: string;
+}
+export interface OssResult {
+  message: string;
+  path: string;
+  src: string;
+  srcSign: string;
+  uploaded: boolean;
 }
 interface ColumnProp {
   title?: string;
@@ -32,13 +39,19 @@ export interface PaginationProp {
 }
 export interface GlobalUserStore {
   users: UserInfo[];
+  user: UserInfo;
   columns: Array<ColumnProp>;
   rules?: {};
   pagination: PaginationProp;
+  isShow: boolean;
+  userEdit: UserInfo;
 }
 const ModuleUser = createStore<GlobalUserStore>({
   state: {
+    userEdit:{},
+    isShow:false,
     users: [],
+    user: {},
     columns: [
       {
         title: "avatar",

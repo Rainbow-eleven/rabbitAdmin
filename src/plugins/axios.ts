@@ -1,9 +1,7 @@
 import { message } from "ant-design-vue";
 import axios from "axios";
-import { useRouter } from "vue-router";
 axios.defaults.baseURL = "http://127.0.0.1:3000";
 import store from "../store/index";
-const router = useRouter();
 // 添加请求拦截器
 axios.interceptors.request.use(
   (config) => {
@@ -32,12 +30,12 @@ axios.interceptors.response.use(
     store.commit("LoadingChangeLoading", false);
     if (error.response.status === 401) {
       const data = {
-        code: -1,
+        code: 500,
         message: "登录时长已失效,请重新登陆",
       };
       message.info(data.message);
       localStorage.removeItem("token");
-      router.push("/login");
+      location.href = "/login";
       return Promise.reject(data);
     }
     if (error.response.status === 500) {

@@ -2,7 +2,7 @@ import { Commit, createStore } from "vuex";
 import axios, { AxiosRequestConfig } from "axios";
 import ModuleLogin, { GlobalLoginStore, LoginInfo } from "./login";
 import ModuleLoading, { GlobalLoadingStore } from "./loading";
-import ModuleUser, { GlobalUserStore, UserInfo } from "./user";
+import ModuleUser, { GlobalUserStore, OssResult, UserInfo } from "./user";
 import { message } from "ant-design-vue";
 import router from "@/router";
 
@@ -30,6 +30,10 @@ export interface MessageResult {
   statusCode: number;
   data?: unknown;
   message: string;
+}
+export interface UserEdit {
+  user: UserInfo;
+  id: number;
 }
 const returnMessage = async (res: MessageResult) => {
   if (res.statusCode === 200) {
@@ -82,6 +86,18 @@ export default createStore<GlobalStore>({
     BackToGo() {
       router.go(-1);
     },
+    UserUploadedAvatar(state, file: OssResult) {
+      state.user.user.faceUrl = file.src;
+    },
+    UserInfoFind(state, user: UserInfo) {
+      state.user.user = user;
+    },
+    UserChangeShowModel(state, bool: boolean) {
+      state.user.isShow = bool;
+    },
+    UserInfoEdit(state, user) {
+      state.user.user = user;
+    },
   },
   actions: {
     async ToLogin({ commit }, loginInfo: LoginInfo) {
@@ -106,6 +122,27 @@ export default createStore<GlobalStore>({
         data: user,
       });
     },
+    async UserInfoFind({ commit }, id: number) {
+      return asyncAndCommit(`/user/${id}`, "UserInfoFind", commit, {
+        method: "get",
+      });
+    },
+    async UserInfoEdit({ commit }, userEdit: UserEdit) {
+      return asyncAndCommit(`/user/${userEdit.id}`, "UserInfoEdit", commit, {
+        method: "put",
+        data: userEdit.user,
+      });
+    },
   },
   modules: { login: ModuleLogin, loading: ModuleLoading, user: ModuleUser },
+  getters: {
+    createdTimeYear: (state) => {
+      return state.user.user.createdTime?.slice(0, 10);
+    },
+    HideCardNo: (state) => {
+      return state.user.user.cardNo?.length === 18
+        ? state.user.user.cardNo?.slice(0, 15) + "####"
+        : "";
+    },
+  },
 });

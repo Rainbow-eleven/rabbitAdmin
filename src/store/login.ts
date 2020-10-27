@@ -4,7 +4,7 @@ export interface LoginInfo {
   password: string;
 }
 export interface UserInfo {
-  isLogin: boolean;
+  isLogin?: boolean;
   id?: number;
   account?: string;
   cardNo?: string;

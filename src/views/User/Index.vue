@@ -39,7 +39,7 @@
   </div>
 </template>
 <script lang="ts">
-import router from '@/router';
+import router from "@/router";
 import store from "@/store";
 import { UserInfo } from "@/store/login";
 import { message, Modal } from "ant-design-vue";
@@ -71,11 +71,14 @@ export default defineComponent({
         },
       });
     };
-    const viewUser = ()=>{
+    const viewUser = (user: UserInfo) => {
       router.push({
-        name:"UserInfo"
-      })
-    }
+        name: "UserInfo",
+        params: {
+          id: user.id ? user.id : 1,
+        },
+      });
+    };
     onBeforeMount(async () => {
       await findUser();
     });
@@ -84,7 +87,7 @@ export default defineComponent({
       data,
       pagination,
       deleteUser,
-      viewUser
+      viewUser,
     };
   },
 });

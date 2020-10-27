@@ -1,0 +1,56 @@
+.infoBox {
+  .ant-form {
+    .ant-form-item-label {
+      padding: 0 0.1rem;
+      label {
+        font-size: 2.125rem;
+        line-height: 2.125rem;
+        color: #9e9e9e;
+      }
+    }
+    .userName {
+      .u_name {
+        width: 15rem;
+      }
+    }
+    .userId {
+      .u_id {
+        width: 15rem;
+      }
+      .tag {
+        margin-left: 10rem;
+      }
+    }
+    .name {
+      .u_name {
+        width: 15rem;
+      }
+    }
+  }
+  .ant-upload-picture-card-wrapper {
+    padding: 2.25rem;
+    width: auto;
+  }
+  .avatar-uploader > .ant-upload {
+    width: 15rem;
+    height: 15rem;
+    img {
+      width: 15rem;
+      height: 15rem;
+      border-radius: 50%;
+    }
+  }
+  .ant-upload-select-picture-card i {
+    font-size: 4rem;
+    color: #999;
+  }
+  .ant-upload-select,
+  .ant-upload-select-picture-card {
+    border-radius: 50%;
+  }
+
+  .ant-upload-select-picture-card .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
+  }
+}

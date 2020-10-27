@@ -16,12 +16,16 @@ import {
   Tag,
   PageHeader,
   Tooltip,
+  Upload,
+  Modal,
+  Radio,
 } from "ant-design-vue";
 
 createApp(App)
   .use(Layout)
   .use(Menu)
   .use(Spin)
+  .use(Upload)
   .use(Table)
   .use(Tag)
   .use(PageHeader)
@@ -29,6 +33,8 @@ createApp(App)
   .use(Dropdown)
   .use(Button)
   .use(Input)
+  .use(Modal)
+  .use(Radio)
   .use(Form)
   .use(Checkbox)
   .use(store)
