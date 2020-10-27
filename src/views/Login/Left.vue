@@ -13,6 +13,7 @@
         <a-input
           v-model:value="formInput.account"
           placeholder="Type your email"
+          @pressEnter="handleSubmit"
         >
           <template v-slot:prefix
             ><UserOutlined style="color:rgba(0,0,0,.25)"
@@ -24,15 +25,16 @@
         class="mt-2 input"
         v-bind="validateInfos.password"
       >
-        <a-input
+        <a-input-password
           v-model:value="formInput.password"
           type="password"
           placeholder="Type your password"
+          @pressEnter="handleSubmit"
         >
           <template v-slot:prefix
             ><LockOutlined style="color:rgba(0,0,0,.25)"
           /></template>
-        </a-input>
+        </a-input-password>
       </a-form-item>
       <a-form-item class="mt-1">
         <a-button type="link" class="float-left mt-1" @click="onResetForm">
@@ -44,7 +46,7 @@
       </a-form-item>
       <a-form-item>
         <a-button
-          class="w-100 mt-1 submit"
+          class="w-100 mt-1 submit text-center"
           type="primary"
           @click="handleSubmit"
         >
@@ -59,19 +61,18 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { useStore } from "vuex";
-import { GlobalLoginStore } from "@/store/login";
 import { useForm } from "@ant-design-vue/use";
 import { notification } from "ant-design-vue";
+import { GlobalStore } from "@/store";
+import { useRouter } from "vue-router";
 interface UserInfo {
   account: string;
   password: string;
 }
-interface VuxModule {
-  login: GlobalLoginStore;
-}
+
 export default defineComponent({
   name: "Login",
   components: {
@@ -79,29 +80,13 @@ export default defineComponent({
     LockOutlined,
   },
   setup() {
-    const store = useStore<VuxModule>();
-    console.log(store);
-    const rules = computed(() => store.state.login.rules);
+    const store = useStore<GlobalStore>();
+    const rules = store.state.login.rules;
+    const router = useRouter();
     const formInput = reactive(store.state.login.fromInput);
     const { resetFields, validate, validateInfos } = useForm(
       formInput,
-      reactive({
-        account: [
-          {
-            required: true,
-            type: "email",
-            message: "Please enter your email",
-            trigger: "blur",
-          },
-        ],
-        password: [
-          {
-            required: true,
-            message: "Please enter your password",
-            trigger: "blur",
-          },
-        ],
-      })
+      reactive(store.state.login.rules ? store.state.login.rules : {})
     );
     const onResetForm = () => {
       resetFields();
@@ -109,8 +94,10 @@ export default defineComponent({
     const handleSubmit = (e: Event) => {
       e.preventDefault();
       validate()
-        .then((res) => {
-          console.log(res);
+        .then(async (res) => {
+          await store.dispatch("ToLogin", res).then(async (res) => {
+            if (res.statusCode === 200) await router.push("/");
+          });
         })
         .catch(() => {
           notification.info({

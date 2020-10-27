@@ -6,12 +6,38 @@
 }
 
 .hover-hand {
+  cursor: pointer !important;
+}
+
+.ant-menu li,
+.ant-dropdown li,
+.ant-message-notice-content div,
+.ant-dropdown-trigger,
+.ant-page-header-heading div {
+  display: flex !important;
+  align-items: center !important;
+}
+.ant-form-item-label {
+  padding: 0 0.1rem;
+  label {
+    font-size: 1.125rem;
+    line-height: 0.975rem;
+    color: #9e9e9e;
+  }
+}
+.ant-page-header {
+  margin: 0;
+  padding: 0;
+}
+
+a {
   cursor: pointer;
 }
 
-li,
-button {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+.ant-btn {
+  border-radius: 0.225rem;
+  -webkit-border-radius: 0.225rem;
+  -moz-border-radius: 0.225rem;
+  -ms-border-radius: 0.225rem;
+  -o-border-radius: 0.225rem;
 }

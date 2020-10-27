@@ -11,11 +11,21 @@ import {
   Form,
   Input,
   Checkbox,
+  Spin,
+  Table,
+  Tag,
+  PageHeader,
+  Tooltip,
 } from "ant-design-vue";
 
 createApp(App)
   .use(Layout)
   .use(Menu)
+  .use(Spin)
+  .use(Table)
+  .use(Tag)
+  .use(PageHeader)
+  .use(Tooltip)
   .use(Dropdown)
   .use(Button)
   .use(Input)
