@@ -47,32 +47,14 @@
       </a-form-item>
     </a-form>
   </a-modal>
-  <a-modal
-    title="Update Password"
-    :visible="visiblePass"
-    @ok="PassOk"
-    @cancel="PassCancel"
-    keyboard="true"
-  >
-    <h6>Please enter your old password to update the password :</h6>
-    <a-form class="mt-4 pass">
-      <a-form-item class="verifyPassword">
-        <a-input placeholder="Please enter your old password" @blur="SendOldPass"></a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-input
-          :disabled="!isCorrect"
-          placeholder="Please enter your new password"
-        ></a-input>
-      </a-form-item>
-    </a-form>
-  </a-modal>
+  <UpdatePassword :id="id"></UpdatePassword>
 </template>
 <script lang="ts">
 import router from "@/router";
 import store, { MessageResult } from "@/store";
 import { message } from "ant-design-vue";
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
+import UpdatePassword from "./UpdatePassword.vue";
 
 export default defineComponent({
   name: "EditModel",
@@ -81,10 +63,9 @@ export default defineComponent({
       type: Number,
     },
   },
+  components: { UpdatePassword },
   setup(props) {
     const visible = computed(() => store.state.user.isShow);
-    const visiblePass = ref(false);
-    const isCorrect = computed(() => store.state.user.isCorrect);
     const findUser = () => {
       store.dispatch("UserInfoFind", {
         id: props.id,
@@ -95,6 +76,9 @@ export default defineComponent({
     const handleCancel = () => {
       store.commit("UserChangeShowModel", false);
       findUser();
+    };
+    const showPass = () => {
+      store.commit("UserChangeShowPassModel", true);
     };
     const EditCallback = async () => {
       const res: MessageResult = await store.dispatch(`UserInfoEdit`, {
@@ -131,25 +115,17 @@ export default defineComponent({
         store.commit("UserEditChangeVerified", 0);
       }
     };
-    const showPass = () => {
-      visiblePass.value = true;
-    };
-    const PassCancel = () => {
-      visiblePass.value = false;
-    };
+
     onMounted(() => {
       findUser();
     });
     return {
       handleCancel,
       visible,
-      visiblePass,
+      showPass,
       watchCardNo,
       userEditInfo,
       handleOk,
-      showPass,
-      PassCancel,
-      isCorrect,
     };
   },
 });

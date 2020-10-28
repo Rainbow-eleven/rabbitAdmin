@@ -39,6 +39,10 @@ export interface ActionMutationsProp {
   mutations: string;
   id: number;
 }
+export interface PasswordProp {
+  id: number;
+  pass: string;
+}
 const returnMessage = async (res: MessageResult) => {
   if (res.statusCode === 200) {
     message.success(res.message);
@@ -53,14 +57,14 @@ export default createStore<GlobalStore>({
     },
     LoginFinish(state, res) {
       if (res.statusCode === 200) {
-        message.success(res.message);
+        message.success("login successful");
         const { token } = res.data;
         state.login.token = token;
         state.login.user = { isLogin: true };
         localStorage.setItem("token", token);
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       } else {
-        message.error(res.message);
+        message.error("Login failed, please re-enter account or password");
       }
     },
     logout(state) {
@@ -68,6 +72,15 @@ export default createStore<GlobalStore>({
       state.login.user = { isLogin: false };
       localStorage.removeItem("token");
       delete axios.defaults.headers.common.Authorization;
+    },
+    LoginUserInfo(state, user: UserInfo) {
+      state.login.user = user;
+    },
+    LoginChangeShowModal(state, bool: boolean) {
+      state.login.isShowResetPass = bool;
+    },
+    LoginChangeIsSend(state, bool: boolean) {
+      state.login.isSend = bool;
     },
     UserFind(state, res) {
       state.user.users = res.data;
@@ -87,6 +100,9 @@ export default createStore<GlobalStore>({
     UserChangeCurrent(state, num) {
       state.user.pagination.current = num;
     },
+    UserFindAccount() {
+      return null;
+    },
     BackToGo() {
       router.go(-1);
     },
@@ -102,6 +118,9 @@ export default createStore<GlobalStore>({
     UserChangeShowModel(state, bool: boolean) {
       state.user.isShow = bool;
     },
+    UserChangeShowPassModel(state, bool: boolean) {
+      state.user.isShowPass = bool;
+    },
     UserInfoEdit(state, user) {
       state.user.user = user;
     },
@@ -113,6 +132,24 @@ export default createStore<GlobalStore>({
     },
     UserChangeIsCorrect(state, bool: boolean) {
       state.user.isCorrect = bool;
+    },
+    UserVolidatePass(state, res: MessageResult) {
+      if (res.statusCode == 200) {
+        message.success("Fully match the old password");
+        state.user.isCorrect = true;
+      } else {
+        message.error("Does not match the old password");
+        state.user.isCorrect = false;
+      }
+    },
+    UserUpdatePassword() {
+      message.success("Successfully modified");
+    },
+    UserSendEmail(state, res) {
+      sessionStorage.setItem("emailCode", res.data.code);
+    },
+    LoginChangeRouterNum(state, res: number) {
+      state.login.routerNum = res;
     },
   },
   actions: {
@@ -148,6 +185,33 @@ export default createStore<GlobalStore>({
         method: "put",
         data: userEdit.user,
       });
+    },
+    async UserVolidatePass({ commit }, oldPass: PasswordProp) {
+      return asyncAndCommit(
+        `/user/volidateOldPass`,
+        "UserVolidatePass",
+        commit,
+        {
+          method: "post",
+          data: oldPass,
+        }
+      );
+    },
+    async UserUpdatePassword({ commit }, newPass: PasswordProp) {
+      return asyncAndCommit(`/user/updatePass`, "UserUpdatePassword", commit, {
+        method: "post",
+        data: newPass,
+      });
+    },
+    async UserFindAccount({ commit }, account: string) {
+      return asyncAndCommit(
+        `/user/account/${account}`,
+        "UserFindAccount",
+        commit
+      );
+    },
+    async UserSendEmail({ commit }, account: string) {
+      return asyncAndCommit(`/email/${account}`, "UserSendEmail", commit);
     },
   },
   modules: { login: ModuleLogin, loading: ModuleLoading, user: ModuleUser },

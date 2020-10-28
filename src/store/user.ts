@@ -47,11 +47,13 @@ export interface GlobalUserStore {
   isShow: boolean;
   userEdit: UserInfo;
   isCorrect: boolean;
+  isShowPass: boolean;
 }
 const ModuleUser = createStore<GlobalUserStore>({
   state: {
     userEdit: {},
     isShow: false,
+    isShowPass: false,
     users: [],
     user: {},
     columns: [

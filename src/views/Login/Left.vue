@@ -12,6 +12,7 @@
       <a-form-item class="input" label="Email" v-bind="validateInfos.account">
         <a-input
           v-model:value="formInput.account"
+          allow-clear
           placeholder="Type your email"
           @pressEnter="handleSubmit"
         >
@@ -40,7 +41,7 @@
         <a-button type="link" class="float-left mt-1" @click="onResetForm">
           Reset Form
         </a-button>
-        <a-button class="float-right" type="link">
+        <a-button @click="showModal" class="float-right" type="link">
           Reset Password!
         </a-button>
       </a-form-item>
@@ -59,10 +60,12 @@
       <a-button type="link">register now!</a-button>
     </div>
   </div>
+  <ResetPassword></ResetPassword>
 </template>
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
+import ResetPassword from "./ResetPassword.vue";
 import { useStore } from "vuex";
 import { useForm } from "@ant-design-vue/use";
 import { notification } from "ant-design-vue";
@@ -78,12 +81,16 @@ export default defineComponent({
   components: {
     UserOutlined,
     LockOutlined,
+    ResetPassword,
   },
   setup() {
     const store = useStore<GlobalStore>();
     const rules = store.state.login.rules;
     const router = useRouter();
     const formInput = reactive(store.state.login.fromInput);
+    const showModal = () => {
+      store.commit("LoginChangeShowModal", true);
+    };
     const { resetFields, validate, validateInfos } = useForm(
       formInput,
       reactive(store.state.login.rules ? store.state.login.rules : {})
@@ -97,6 +104,7 @@ export default defineComponent({
         .then(async (res) => {
           await store.dispatch("ToLogin", res).then(async (res) => {
             if (res.statusCode === 200) await router.push("/");
+            localStorage.setItem("userId", res.data.user.id);
           });
         })
         .catch(() => {
@@ -113,6 +121,7 @@ export default defineComponent({
       handleSubmit,
       validateInfos,
       onResetForm,
+      showModal,
     };
   },
 });

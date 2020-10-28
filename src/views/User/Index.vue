@@ -11,7 +11,7 @@
           :src="text"
           width="50"
           height="50"
-          alt=""
+          alt="avatar"
         />
       </template>
       <template #username="{text}">

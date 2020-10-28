@@ -32,14 +32,16 @@
         <a-dropdown class="mr-2 hover-hand" :trigger="['click']">
           <template v-slot:overlay>
             <a-menu @click="handleMenuClick">
-              <a-menu-item key="1"><UserOutlined />个人资料</a-menu-item>
+              <a-menu-item key="1" @click="linkToInfo"
+                ><UserOutlined />Person Info</a-menu-item
+              >
               <a-menu-item key="2" @click="logout"
-                ><UserOutlined />退出登录</a-menu-item
+                ><UnlockOutlined />Sign out</a-menu-item
               >
             </a-menu>
           </template>
           <a-button style="margin-left: 8px">
-            <span class="mr-2">管理员</span> <DownOutlined />
+            <span class="mr-2">{{ user.username }}</span> <DownOutlined />
           </a-button>
         </a-dropdown>
       </a-layout-header>
@@ -62,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import {
   UserOutlined,
   MenuUnfoldOutlined,
@@ -70,6 +72,7 @@ import {
   VideoCameraOutlined,
   UploadOutlined,
   DownOutlined,
+  UnlockOutlined,
 } from "@ant-design/icons-vue";
 import store from "@/store";
 import { useRouter } from "vue-router";
@@ -79,6 +82,7 @@ export default defineComponent({
     UserOutlined,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
+    UnlockOutlined,
     VideoCameraOutlined,
     UploadOutlined,
     DownOutlined,
@@ -88,19 +92,32 @@ export default defineComponent({
     const router = useRouter();
     const selectedKeys = ref([]);
     const menuData = ref(["user", "model"]);
+    const user = computed(() => store.state.login.user);
     const routerPush = (path: string) => {
       router.push(path);
     };
     const logout = () => {
       store.commit("logout");
+      localStorage.removeItem("userId");
       location.href = "/login";
     };
+    const linkToInfo = () => {
+      routerPush(`/user/info/${user.value.id}`);
+    };
+    onMounted(async () => {
+      await store.dispatch("UserInfoFind", {
+        mutations: "LoginUserInfo",
+        id: localStorage.getItem("userId"),
+      });
+    });
     return {
       collapsed,
       selectedKeys,
       routerPush,
       logout,
       menuData,
+      user,
+      linkToInfo,
     };
   },
 });

@@ -21,11 +21,19 @@ export interface GlobalLoginStore {
   token: string;
   rules?: {};
   user: UserInfo;
+  isShowResetPass: boolean;
+  isSend: boolean;
+  email: string;
+  routerNum: number;
 }
 const ModuleLogin = createStore<GlobalLoginStore>({
   state: {
+    isSend: false,
+    routerNum: 0,
     user: { isLogin: false },
     token: localStorage.getItem("token") || "",
+    isShowResetPass: false,
+    email: "",
     rules: {
       account: [
         {

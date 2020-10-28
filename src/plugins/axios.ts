@@ -1,3 +1,4 @@
+import router from "@/router";
 import { message } from "ant-design-vue";
 import axios from "axios";
 axios.defaults.baseURL = "http://127.0.0.1:3000";
@@ -35,7 +36,7 @@ axios.interceptors.response.use(
       };
       message.info(data.message);
       localStorage.removeItem("token");
-      location.href = "/login";
+      router.push("/login");
       return Promise.reject(data);
     }
     if (error.response.status === 500) {
