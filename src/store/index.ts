@@ -35,6 +35,10 @@ export interface UserEdit {
   user: UserInfo;
   id: number;
 }
+export interface ActionMutationsProp {
+  mutations: string;
+  id: number;
+}
 const returnMessage = async (res: MessageResult) => {
   if (res.statusCode === 200) {
     message.success(res.message);
@@ -92,11 +96,23 @@ export default createStore<GlobalStore>({
     UserInfoFind(state, user: UserInfo) {
       state.user.user = user;
     },
+    UserInfoFindEdit(state, user: UserInfo) {
+      state.user.userEdit = user;
+    },
     UserChangeShowModel(state, bool: boolean) {
       state.user.isShow = bool;
     },
     UserInfoEdit(state, user) {
       state.user.user = user;
+    },
+    UserEditChangeVerified(state, Num: number) {
+      state.user.userEdit.isAuthentication = Num;
+    },
+    UserEditClearCardNo(state) {
+      state.user.userEdit.cardNo = "";
+    },
+    UserChangeIsCorrect(state, bool: boolean) {
+      state.user.isCorrect = bool;
     },
   },
   actions: {
@@ -122,8 +138,8 @@ export default createStore<GlobalStore>({
         data: user,
       });
     },
-    async UserInfoFind({ commit }, id: number) {
-      return asyncAndCommit(`/user/${id}`, "UserInfoFind", commit, {
+    async UserInfoFind({ commit }, arg: ActionMutationsProp) {
+      return asyncAndCommit(`/user/${arg.id}`, arg.mutations, commit, {
         method: "get",
       });
     },
@@ -141,7 +157,7 @@ export default createStore<GlobalStore>({
     },
     HideCardNo: (state) => {
       return state.user.user.cardNo?.length === 18
-        ? state.user.user.cardNo?.slice(0, 15) + "####"
+        ? state.user.user.cardNo?.slice(0, 14) + "####"
         : "";
     },
   },

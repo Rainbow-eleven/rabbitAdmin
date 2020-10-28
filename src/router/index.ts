@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       message.info("请您先登录再进入页面");
-      return next("/login");
+      next("/login");
     }
   } else {
     next();

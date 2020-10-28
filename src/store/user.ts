@@ -42,14 +42,16 @@ export interface GlobalUserStore {
   user: UserInfo;
   columns: Array<ColumnProp>;
   rules?: {};
+  userRules?: {};
   pagination: PaginationProp;
   isShow: boolean;
   userEdit: UserInfo;
+  isCorrect: boolean;
 }
 const ModuleUser = createStore<GlobalUserStore>({
   state: {
-    userEdit:{},
-    isShow:false,
+    userEdit: {},
+    isShow: false,
     users: [],
     user: {},
     columns: [
@@ -90,6 +92,44 @@ const ModuleUser = createStore<GlobalUserStore>({
         slots: { customRender: "action" },
       },
     ],
+    userRules: {
+      account: [
+        {
+          required: true,
+          type: "email",
+          message: "Please enter your email",
+          trigger: "blur",
+        },
+      ],
+      username: [
+        {
+          required: true,
+          message: "Please enter your username",
+          trigger: "blur",
+        },
+      ],
+      name: [
+        {
+          required: true,
+          message: "Please enter your actualName",
+          trigger: "blur",
+        },
+      ],
+      cardNo: [
+        {
+          required: false,
+          type: "string",
+          message: "Please enter your actualName",
+          trigger: "blur",
+        },
+        {
+          min: 18,
+          max: 18,
+          message: "Length should be 18",
+          trigger: "blur",
+        },
+      ],
+    },
     rules: {
       account: [
         {
@@ -119,6 +159,7 @@ const ModuleUser = createStore<GlobalUserStore>({
       hideOnSinglePage: true,
       simple: true,
     },
+    isCorrect: false,
   },
 });
 export default ModuleUser;

@@ -93,7 +93,7 @@ export default defineComponent({
     };
     const logout = () => {
       store.commit("logout");
-      router.push({ name: "Login" });
+      location.href = "/login";
     };
     return {
       collapsed,

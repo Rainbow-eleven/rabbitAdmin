@@ -28,7 +28,7 @@
               {{ user.username ? user.username : "小兔子" }}
             </h1>
             <a-button @click="showModal">Edit UserInfo</a-button>
-            <EditModel :isShow="visible"></EditModel>
+            <EditModel :id="id" :isShow="visible"></EditModel>
           </div>
           <div class="userId mt-3 d-flex align-items-center">
             <h6 class="u_id">userNo : {{ user.id }}</h6>
@@ -88,7 +88,10 @@ export default defineComponent({
     });
     const visible = ref(false);
     const findUser = async () => {
-      await store.dispatch("UserInfoFind", props.id);
+      await store.dispatch("UserInfoFind", {
+        id: props.id,
+        mutations: "UserInfoFind",
+      });
     };
     const showModal = async () => {
       store.commit("UserChangeShowModel", true);

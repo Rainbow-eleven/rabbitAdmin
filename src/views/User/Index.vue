@@ -25,7 +25,7 @@
         </a>
       </template>
       <template #isAuthentication="{text}">
-        <a-tag color="pink">
+        <a-tag :color="text === 1 ? 'blue' : 'red'">
           {{ text == 0 ? "未实名" : "已实名" }}
         </a-tag>
       </template>
