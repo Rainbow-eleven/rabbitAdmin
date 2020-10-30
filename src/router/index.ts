@@ -32,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("../views/Login/Login.vue"),
     meta: { redirectAlreadyLogin: true },
   },
+  {
+    path: "/reg",
+    name: "Reg",
+    component: () => import("../views/Login/Reg.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -43,8 +48,12 @@ router.beforeEach((to, from, next) => {
     if (store.state.login.user.isLogin) {
       next();
     } else {
-      message.info("请您先登录再进入页面");
-      next("/login");
+      if (to.path == "/reg") {
+        next();
+      } else {
+        message.info("请您先登录再进入页面");
+        next("/login");
+      }
     }
   } else {
     next();

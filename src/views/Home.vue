@@ -41,7 +41,10 @@
             </a-menu>
           </template>
           <a-button style="margin-left: 8px">
-            <span class="mr-2">{{ user.username }}</span> <DownOutlined />
+            <span class="mr-2">{{
+              user.username !== null ? user.username : "匿名用户"
+            }}</span>
+            <DownOutlined />
           </a-button>
         </a-dropdown>
       </a-layout-header>
@@ -105,7 +108,7 @@ export default defineComponent({
       routerPush(`/user/info/${user.value.id}`);
     };
     onMounted(async () => {
-      await store.dispatch("UserInfoFind", {
+      await store.dispatch("login/UserInfoFind", {
         mutations: "LoginUserInfo",
         id: localStorage.getItem("userId"),
       });

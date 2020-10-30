@@ -51,7 +51,8 @@
 </template>
 <script lang="ts">
 import router from "@/router";
-import store, { MessageResult } from "@/store";
+import store from "@/store";
+import { MessageResult } from "@/store/user";
 import { message } from "ant-design-vue";
 import { computed, defineComponent, onMounted } from "vue";
 import UpdatePassword from "./UpdatePassword.vue";
@@ -67,38 +68,38 @@ export default defineComponent({
   setup(props) {
     const visible = computed(() => store.state.user.isShow);
     const findUser = () => {
-      store.dispatch("UserInfoFind", {
+      store.dispatch("user/UserInfoFind", {
         id: props.id,
         mutations: "UserInfoFindEdit",
       });
     };
     const userEditInfo = computed(() => store.state.user.userEdit);
     const handleCancel = () => {
-      store.commit("UserChangeShowModel", false);
+      store.commit("user/UserChangeShowModel", false);
       findUser();
     };
     const showPass = () => {
-      store.commit("UserChangeShowPassModel", true);
+      store.commit("user/UserChangeShowPassModel", true);
     };
     const EditCallback = async () => {
-      const res: MessageResult = await store.dispatch(`UserInfoEdit`, {
+      const res: MessageResult = await store.dispatch(`user/UserInfoEdit`, {
         user: userEditInfo.value,
         id: props.id,
       });
       if (res.statusCode === 200) {
-        store.commit("UserChangeShowModel", false);
+        store.commit("user/UserChangeShowModel", false);
         router.push("/user");
       }
     };
     const watchCardNo = () => {
       if (userEditInfo.value.cardNo) {
         if (userEditInfo.value.cardNo.length === 18) {
-          store.commit("UserEditChangeVerified", 1);
+          store.commit("user/UserEditChangeVerified", 1);
         } else {
-          store.commit("UserEditChangeVerified", 0);
+          store.commit("user/UserEditChangeVerified", 0);
         }
       } else {
-        store.commit("UserEditChangeVerified", 0);
+        store.commit("user/UserEditChangeVerified", 0);
       }
     };
     const handleOk = async (e: Event) => {
@@ -112,7 +113,7 @@ export default defineComponent({
         }
       } else {
         EditCallback();
-        store.commit("UserEditChangeVerified", 0);
+        store.commit("user/UserEditChangeVerified", 0);
       }
     };
 
@@ -130,7 +131,7 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .pass {
   input,
   button {

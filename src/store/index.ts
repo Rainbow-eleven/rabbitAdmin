@@ -1,17 +1,19 @@
 import { Commit, createStore } from "vuex";
 import axios, { AxiosRequestConfig } from "axios";
-import ModuleLogin, { GlobalLoginStore, LoginInfo } from "./login";
+import ModuleLogin, { GlobalLoginStore } from "./login";
 import ModuleLoading, { GlobalLoadingStore } from "./loading";
-import ModuleUser, { GlobalUserStore, OssResult, UserInfo } from "./user";
+import ModuleUser, { GlobalUserStore, MessageResult } from "./user";
 import { message } from "ant-design-vue";
 import router from "@/router";
+import ModuleReg, { GlobalRegStore } from "./Reg";
 
 export interface GlobalStore {
   login: GlobalLoginStore;
   loading: GlobalLoadingStore;
   user: GlobalUserStore;
+  reg: GlobalRegStore;
 }
-const asyncAndCommit = async (
+export const asyncAndCommit = async (
   url: string,
   mutationName: string,
   commit: Commit,
@@ -26,24 +28,7 @@ const asyncAndCommit = async (
   }
   return data;
 };
-export interface MessageResult {
-  statusCode: number;
-  data?: unknown;
-  message: string;
-}
-export interface UserEdit {
-  user: UserInfo;
-  id: number;
-}
-export interface ActionMutationsProp {
-  mutations: string;
-  id: number;
-}
-export interface PasswordProp {
-  id: number;
-  pass: string;
-}
-const returnMessage = async (res: MessageResult) => {
+export const returnMessage = async (res: MessageResult) => {
   if (res.statusCode === 200) {
     message.success(res.message);
   } else if (res.statusCode === 500) {
@@ -52,169 +37,18 @@ const returnMessage = async (res: MessageResult) => {
 };
 export default createStore<GlobalStore>({
   mutations: {
-    LoadingChangeLoading(state, bool) {
-      state.loading.isLoading = bool;
-    },
-    LoginFinish(state, res) {
-      if (res.statusCode === 200) {
-        message.success("login successful");
-        const { token } = res.data;
-        state.login.token = token;
-        state.login.user = { isLogin: true };
-        localStorage.setItem("token", token);
-        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-      } else {
-        message.error("Login failed, please re-enter account or password");
-      }
-    },
-    logout(state) {
-      state.login.token = "";
-      state.login.user = { isLogin: false };
-      localStorage.removeItem("token");
-      delete axios.defaults.headers.common.Authorization;
-    },
-    LoginUserInfo(state, user: UserInfo) {
-      state.login.user = user;
-    },
-    LoginChangeShowModal(state, bool: boolean) {
-      state.login.isShowResetPass = bool;
-    },
-    LoginChangeIsSend(state, bool: boolean) {
-      state.login.isSend = bool;
-    },
-    UserFind(state, res) {
-      state.user.users = res.data;
-      state.user.users.map((item: UserInfo, index: number) => {
-        return Object.assign(item, { key: index });
-      });
-    },
-    UserDelete(state, res) {
-      returnMessage(res);
-    },
-    UserCreate(state, res) {
-      returnMessage(res);
-    },
-    UserChangeTotal(state, num) {
-      state.user.pagination.total = num;
-    },
-    UserChangeCurrent(state, num) {
-      state.user.pagination.current = num;
-    },
-    UserFindAccount() {
-      return null;
-    },
     BackToGo() {
       router.go(-1);
     },
-    UserUploadedAvatar(state, file: OssResult) {
-      state.user.user.faceUrl = file.src;
-    },
-    UserInfoFind(state, user: UserInfo) {
-      state.user.user = user;
-    },
-    UserInfoFindEdit(state, user: UserInfo) {
-      state.user.userEdit = user;
-    },
-    UserChangeShowModel(state, bool: boolean) {
-      state.user.isShow = bool;
-    },
-    UserChangeShowPassModel(state, bool: boolean) {
-      state.user.isShowPass = bool;
-    },
-    UserInfoEdit(state, user) {
-      state.user.user = user;
-    },
-    UserEditChangeVerified(state, Num: number) {
-      state.user.userEdit.isAuthentication = Num;
-    },
-    UserEditClearCardNo(state) {
-      state.user.userEdit.cardNo = "";
-    },
-    UserChangeIsCorrect(state, bool: boolean) {
-      state.user.isCorrect = bool;
-    },
-    UserVolidatePass(state, res: MessageResult) {
-      if (res.statusCode == 200) {
-        message.success("Fully match the old password");
-        state.user.isCorrect = true;
-      } else {
-        message.error("Does not match the old password");
-        state.user.isCorrect = false;
-      }
-    },
-    UserUpdatePassword() {
-      message.success("Successfully modified");
-    },
-    UserSendEmail(state, res) {
-      sessionStorage.setItem("emailCode", res.data.code);
-    },
-    LoginChangeRouterNum(state, res: number) {
-      state.login.routerNum = res;
-    },
   },
   actions: {
-    async ToLogin({ commit }, loginInfo: LoginInfo) {
-      return asyncAndCommit("/login", "LoginFinish", commit, {
-        method: "post",
-        data: loginInfo,
-      });
-    },
-    async FindUser({ commit }) {
-      return asyncAndCommit("/user", "UserFind", commit, {
-        method: "get",
-      });
-    },
-    async UserDeleteUser({ commit }, user: UserInfo) {
-      return asyncAndCommit(`/user/${user.id}`, "UserDelete", commit, {
-        method: "delete",
-      });
-    },
-    async UserCreateUser({ commit }, user: LoginInfo) {
-      return asyncAndCommit(`/user`, "UserCreate", commit, {
-        method: "post",
-        data: user,
-      });
-    },
-    async UserInfoFind({ commit }, arg: ActionMutationsProp) {
-      return asyncAndCommit(`/user/${arg.id}`, arg.mutations, commit, {
-        method: "get",
-      });
-    },
-    async UserInfoEdit({ commit }, userEdit: UserEdit) {
-      return asyncAndCommit(`/user/${userEdit.id}`, "UserInfoEdit", commit, {
-        method: "put",
-        data: userEdit.user,
-      });
-    },
-    async UserVolidatePass({ commit }, oldPass: PasswordProp) {
-      return asyncAndCommit(
-        `/user/volidateOldPass`,
-        "UserVolidatePass",
-        commit,
-        {
-          method: "post",
-          data: oldPass,
-        }
-      );
-    },
-    async UserUpdatePassword({ commit }, newPass: PasswordProp) {
-      return asyncAndCommit(`/user/updatePass`, "UserUpdatePassword", commit, {
-        method: "post",
-        data: newPass,
-      });
-    },
-    async UserFindAccount({ commit }, account: string) {
-      return asyncAndCommit(
-        `/user/account/${account}`,
-        "UserFindAccount",
-        commit
-      );
-    },
-    async UserSendEmail({ commit }, account: string) {
-      return asyncAndCommit(`/email/${account}`, "UserSendEmail", commit);
-    },
   },
-  modules: { login: ModuleLogin, loading: ModuleLoading, user: ModuleUser },
+  modules: {
+    login: ModuleLogin,
+    loading: ModuleLoading,
+    user: ModuleUser,
+    reg: ModuleReg,
+  },
   getters: {
     createdTimeYear: (state) => {
       return state.user.user.createdTime?.slice(0, 10);

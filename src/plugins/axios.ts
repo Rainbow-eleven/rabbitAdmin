@@ -7,13 +7,13 @@ import store from "../store/index";
 axios.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
-    store.commit("LoadingChangeLoading", true);
+    store.commit("loading/ChangeLoading", true);
     config.headers.common.Authorization = `Bearer ${store.state.login.token}`;
     return config;
   },
   (error) => {
     // 对请求错误做些什么
-    store.commit("LoadingChangeLoading", true);
+    store.commit("loading/ChangeLoading", true);
     store.state.login.user.isLogin = false;
     return Promise.reject(error);
   }
@@ -23,12 +23,12 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   function(response) {
     // 对响应数据做点什么
-    store.commit("LoadingChangeLoading", false);
+    store.commit("loading/ChangeLoading", false);
     return response;
   },
   function(error) {
     // 对响应错误做点什么
-    store.commit("LoadingChangeLoading", false);
+    store.commit("loading/ChangeLoading", false);
     if (error.response.status === 401) {
       const data = {
         code: 500,

@@ -32,7 +32,6 @@
       <template #action="{text}">
         <div class="d-flex align-items-center justify-content-around">
           <a-button @click="viewUser(text)" type="primary">View</a-button>
-          <a-button @click="deleteUser(text)" type="danger">Delete</a-button>
         </div>
       </template>
     </a-table>
@@ -42,7 +41,6 @@
 import router from "@/router";
 import store from "@/store";
 import { UserInfo } from "@/store/login";
-import { message, Modal } from "ant-design-vue";
 import { computed, defineComponent, onBeforeMount, ref } from "vue";
 
 export default defineComponent({
@@ -54,22 +52,8 @@ export default defineComponent({
       total: data.value.length,
     });
     const findUser = async () => {
-      const { total } = await store.dispatch("FindUser");
-      store.commit("UserChangeTotal", total);
-    };
-    const deleteUser = (user: UserInfo) => {
-      Modal.confirm({
-        title: "Do you want to delete this user?",
-        content:
-          "If you delete this user, the user may be bound to other modules.",
-        async onOk() {
-          await store.dispatch("UserDeleteUser", user);
-          await findUser();
-        },
-        onCancel() {
-          message.info("取消删除");
-        },
-      });
+      const { total } = await store.dispatch("user/FindUser");
+      store.commit("user/UserChangeTotal", total);
     };
     const viewUser = (user: UserInfo) => {
       router.push({
@@ -86,7 +70,6 @@ export default defineComponent({
       columns,
       data,
       pagination,
-      deleteUser,
       viewUser,
     };
   },

@@ -55,9 +55,11 @@
         </a-button>
       </a-form-item>
     </a-form>
-    <div class="reg mt-5 d-flex justify-content-center align-items-center">
+    <div class="mt-5 d-flex justify-content-center align-items-center">
       <div>Don't hava an account?</div>
-      <a-button type="link">register now!</a-button>
+      <a-button type="link"
+        ><router-link to="/reg">register now!</router-link></a-button
+      >
     </div>
   </div>
   <ResetPassword></ResetPassword>
@@ -89,7 +91,7 @@ export default defineComponent({
     const router = useRouter();
     const formInput = reactive(store.state.login.fromInput);
     const showModal = () => {
-      store.commit("LoginChangeShowModal", true);
+      store.commit("login/LoginChangeShowModal", true);
     };
     const { resetFields, validate, validateInfos } = useForm(
       formInput,
@@ -102,7 +104,7 @@ export default defineComponent({
       e.preventDefault();
       validate()
         .then(async (res) => {
-          await store.dispatch("ToLogin", res).then(async (res) => {
+          await store.dispatch("login/ToLogin", res).then(async (res) => {
             if (res.statusCode === 200) await router.push("/");
             localStorage.setItem("userId", res.data.user.id);
           });

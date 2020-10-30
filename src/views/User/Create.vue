@@ -30,8 +30,9 @@
 import { defineComponent, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useForm } from "@ant-design-vue/use";
-import store, { MessageResult } from "@/store";
+import store from "@/store";
 import { LoginInfo } from "@/store/login";
+import { MessageResult } from '@/store/user';
 
 export default defineComponent({
   setup() {
@@ -52,13 +53,13 @@ export default defineComponent({
       validate()
         .then(async (res: LoginInfo) => {
           const { statusCode }: MessageResult = await store.dispatch(
-            "UserCreateUser",
+            "user/UserCreateUser",
             res
           );
           if (statusCode === 200) {
             router.push("/user");
-            const { total } = await store.dispatch("FindUser");
-            store.commit("UserChangeTotal", total);
+            const { total } = await store.dispatch("user/FindUser");
+            store.commit("user/UserChangeTotal", total);
           }
         })
         .catch(() => {

@@ -44,13 +44,13 @@ export default defineComponent({
     const visiblePass = computed(() => store.state.user.isShowPass);
     const isCorrect = computed(() => store.state.user.isCorrect);
     const PassCancel = () => {
-      store.commit("UserChangeShowPassModel", false);
+      store.commit("user/UserChangeShowPassModel", false);
       newPass.value = "";
       oldPass.value = "";
-      store.commit("UserChangeIsCorrect", false);
+      store.commit("user/UserChangeIsCorrect", false);
     };
     const SendOldPass = async () => {
-      await store.dispatch("UserVolidatePass", {
+      await store.dispatch("user/UserVolidatePass", {
         id: props.id,
         pass: oldPass.value,
       });
@@ -59,7 +59,7 @@ export default defineComponent({
       if (!isCorrect.value || newPass.value === "") {
         message.info("Please enter the old password first");
       } else {
-        await store.dispatch("UserUpdatePassword", {
+        await store.dispatch("user/UserUpdatePassword", {
           id: props.id,
           pass: newPass.value,
         });

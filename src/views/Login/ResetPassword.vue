@@ -6,30 +6,40 @@
     centered
     @cancel="handleCancel"
   >
-    <a-form v-if="routerNum === 0">
-      <a-form-item>
-        <a-input
-          placeholder="Please enter your e-mail address"
-          type="email"
-          @blur="findAccount"
-          v-model:value="email"
-        ></a-input>
-      </a-form-item>
-      <a-form-item class="SendEmail">
-        <a-input
-          placeholder="Please enter your verification code"
-          :disabled="isDis"
-          v-model:value="emailCode"
-        ></a-input>
-        <a-button class="ml-2" @click="SendEmail" :disabled="isSendOf">
-          <span v-if="num !== 60">{{ num }}s </span>
-          <span class="ml-1">SendEmail</span>
-        </a-button>
-      </a-form-item>
-    </a-form>
-    <div v-if="routerNum == 1">
-      哈哈哈
-    </div>
+    <transition name="fade" mode="out-in">
+      <a-form v-if="routerNum === 0">
+        <a-form-item>
+          <a-input
+            placeholder="Please enter your e-mail address"
+            type="email"
+            @blur="findAccount"
+            v-model:value="email"
+          ></a-input>
+        </a-form-item>
+        <a-form-item class="SendEmail">
+          <a-input
+            placeholder="Please enter your verification code"
+            :disabled="isDis"
+            v-model:value="emailCode"
+          ></a-input>
+          <a-button class="ml-2" @click="SendEmail" :disabled="isSendOf">
+            <span v-if="num !== 60">{{ num }}s </span>
+            <span class="ml-1">SendEmail</span>
+          </a-button>
+        </a-form-item>
+      </a-form>
+      <div v-else>
+        <a-form class="mt-4 pass">
+          <a-form-item>
+            <a-input-password
+              placeholder="Please enter your new password"
+              v-model:value="newPass"
+              @pressEnter="UpdateNewPassword"
+            ></a-input-password>
+          </a-form-item>
+        </a-form>
+      </div>
+    </transition>
   </a-modal>
 </template>
 <script lang="ts">
@@ -45,6 +55,7 @@ export default defineComponent({
     const email = ref(store.state.login.email);
     const isDis = ref(true);
     const emailCode = ref();
+    const newPass = ref("");
     const findAccount = async () => {
       if (email.value.length > 0) {
         const user = await store.dispatch("UserFindAccount", email.value);
@@ -62,34 +73,46 @@ export default defineComponent({
         } else {
           const timer = setInterval(() => {
             num.value--;
-            store.commit("LoginChangeIsSend", true);
+            store.commit("login/LoginChangeIsSend", true);
             if (num.value == 0) {
-              store.commit("LoginChangeIsSend", false);
+              store.commit("login/LoginChangeIsSend", false);
               num.value = 60;
               clearInterval(timer);
             }
           }, 1000);
-          await store.dispatch("UserSendEmail", email);
+          await store.dispatch("UserSendEmail", email.value);
         }
       } else {
         message.info("E-mail can not be empty");
       }
     };
     const handleCancel = () => {
-      store.commit("LoginChangeShowModal", false);
-      store.commit("LoginChangeIsSend", false);
-      store.commit("LoginChangeRouterNum", 0);
-      email.value = "";
+      store.commit("login/LoginChangeShowModal", false);
+      store.commit("login/LoginChangeIsSend", false);
+      store.commit("login/LoginChangeRouterNum", 0);
+      // email.value = "";
       emailCode.value = "";
+    };
+    const UpdateNewPassword = async () => {
+      await store.dispatch("UserUpdatePassword", {
+        id: store.state.login.accountInfo.id,
+        pass: newPass.value,
+      });
+      handleCancel();
     };
     const handleOk = () => {
       const code = sessionStorage.getItem("emailCode");
-      if (emailCode.value == code) {
-        store.commit("LoginChangeRouterNum", 1);
+      if (store.state.login.routerNum == 0) {
+        if (emailCode.value == code) {
+          store.commit("login/LoginChangeRouterNum", 1);
+        } else {
+          message.info("Please confirm your verification code");
+        }
       } else {
-        message.info("Please confirm your verification code");
+        UpdateNewPassword();
       }
     };
+
     return {
       visible,
       handleCancel,
@@ -97,16 +120,19 @@ export default defineComponent({
       SendEmail,
       isSendOf,
       email,
+      newPass,
       findAccount,
       isDis,
       handleOk,
       emailCode,
       routerNum,
+      UpdateNewPassword,
     };
   },
 });
 </script>
 <style lang="scss">
+@import "@/assets/css/fade.scss";
 .ant-form {
   input,
   button {

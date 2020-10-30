@@ -16,10 +16,12 @@ import {
   Table,
   Tag,
   PageHeader,
+  Carousel,
   Tooltip,
   Upload,
   Modal,
   Radio,
+  AutoComplete,
 } from "ant-design-vue";
 
 createApp(App)
@@ -29,6 +31,8 @@ createApp(App)
   .use(Upload)
   .use(Table)
   .use(Tag)
+  .use(AutoComplete)
+  .use(Carousel)
   .use(PageHeader)
   .use(Tooltip)
   .use(Dropdown)

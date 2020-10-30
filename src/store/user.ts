@@ -1,4 +1,7 @@
-import { createStore } from "vuex";
+import { LoginInfo } from "./login";
+import { message } from "ant-design-vue";
+import { Module } from "vuex";
+import { GlobalStore, asyncAndCommit, returnMessage } from ".";
 export interface UserInfo {
   isLogin?: boolean;
   id?: number;
@@ -30,6 +33,23 @@ interface ColumnProp {
   slots: SlotProp;
   key?: string;
 }
+export interface MessageResult {
+  statusCode: number;
+  data?: unknown;
+  message: string;
+}
+export interface UserEdit {
+  user: UserInfo;
+  id: number;
+}
+export interface ActionMutationsProp {
+  mutations: string;
+  id: number;
+}
+export interface PasswordProp {
+  id: number;
+  pass: string;
+}
 export interface PaginationProp {
   pageSize: number;
   total: number;
@@ -49,7 +69,128 @@ export interface GlobalUserStore {
   isCorrect: boolean;
   isShowPass: boolean;
 }
-const ModuleUser = createStore<GlobalUserStore>({
+const ModuleUser: Module<GlobalUserStore, GlobalStore> = {
+  mutations: {
+    UserFind(state, res) {
+      state.users = res.data;
+      state.users.map((item: UserInfo, index: number) => {
+        return Object.assign(item, { key: index });
+      });
+    },
+    UserDelete(state, res) {
+      returnMessage(res);
+    },
+    UserCreate(state, res) {
+      returnMessage(res);
+    },
+    UserChangeTotal(state, num) {
+      state.pagination.total = num;
+    },
+    UserChangeCurrent(state, num) {
+      state.pagination.current = num;
+    },
+    UserUploadedAvatar(state, file: OssResult) {
+      state.user.faceUrl = file.src;
+    },
+    UserInfoFind(state, user: UserInfo) {
+      state.user = user;
+    },
+    UserInfoFindEdit(state, user: UserInfo) {
+      state.userEdit = user;
+    },
+    UserChangeShowModel(state, bool: boolean) {
+      state.isShow = bool;
+    },
+    UserChangeShowPassModel(state, bool: boolean) {
+      state.isShowPass = bool;
+    },
+    UserInfoEdit(state, user) {
+      state.user = user;
+    },
+    UserEditChangeVerified(state, Num: number) {
+      state.userEdit.isAuthentication = Num;
+    },
+    UserEditClearCardNo(state) {
+      state.userEdit.cardNo = "";
+    },
+    UserChangeIsCorrect(state, bool: boolean) {
+      state.isCorrect = bool;
+    },
+    UserVolidatePass(state, res: MessageResult) {
+      if (res.statusCode == 200) {
+        message.success("Fully match the old password");
+        state.isCorrect = true;
+      } else {
+        message.error("Does not match the old password");
+        state.isCorrect = false;
+      }
+    },
+    UserUpdatePassword() {
+      message.success("Successfully modified");
+    },
+    UserSendEmail(state, res) {
+      sessionStorage.setItem("emailCode", res.data.code);
+    },
+  },
+  actions: {
+    async FindUser({ commit }) {
+      return asyncAndCommit("/user", "UserFind", commit, {
+        method: "get",
+      });
+    },
+    async UserDeleteUser({ commit }, id: number) {
+      return asyncAndCommit(`/user/${id}`, "UserDelete", commit, {
+        method: "delete",
+      });
+    },
+    async UserCreateUser({ commit }, user: LoginInfo) {
+      return asyncAndCommit(`/user`, "UserCreate", commit, {
+        method: "post",
+        data: user,
+      });
+    },
+    async UserInfoFind({ commit }, arg: ActionMutationsProp) {
+      return asyncAndCommit(`/user/${arg.id}`, arg.mutations, commit, {
+        method: "get",
+      });
+    },
+    async UserInfoEdit({ commit }, userEdit: UserEdit) {
+      return asyncAndCommit(
+        `/user/${userEdit.id}`,
+        "UserInfoEdit",
+        commit,
+        {
+          method: "put",
+          data: userEdit.user,
+        }
+      );
+    },
+    async UserVolidatePass({ commit }, oldPass: PasswordProp) {
+      return asyncAndCommit(
+        `/user/volidateOldPass`,
+        "UserVolidatePass",
+        commit,
+        {
+          method: "post",
+          data: oldPass,
+        }
+      );
+    },
+    async UserUpdatePassword({ commit }, newPass: PasswordProp) {
+      return asyncAndCommit(
+        `/user/updatePass`,
+        "UserUpdatePassword",
+        commit,
+        {
+          method: "post",
+          data: newPass,
+        }
+      );
+    },
+    async UserSendEmail({ commit }, account: string) {
+      return asyncAndCommit(`/email/${account}`, "UserSendEmail", commit);
+    },
+  },
   state: {
     userEdit: {},
     isShow: false,
@@ -70,7 +211,7 @@ const ModuleUser = createStore<GlobalUserStore>({
         slots: { customRender: "account" },
       },
       {
-        title: "username",
+        title: "nickName",
         dataIndex: "username",
         width: "10%",
         slots: { customRender: "username" },
@@ -88,7 +229,7 @@ const ModuleUser = createStore<GlobalUserStore>({
       },
       {
         title: "Action",
-        width: "12.5%",
+        width: "7.5%",
         dataIndex: "",
         key: "x",
         slots: { customRender: "action" },
@@ -163,5 +304,6 @@ const ModuleUser = createStore<GlobalUserStore>({
     },
     isCorrect: false,
   },
-});
+  namespaced: true,
+};
 export default ModuleUser;

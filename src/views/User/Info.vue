@@ -27,6 +27,7 @@
             <h1 class="u_name">
               {{ user.username ? user.username : "小兔子" }}
             </h1>
+            <h6 class="w22rem">account : {{ user.account }}</h6>
             <a-button @click="showModal">Edit UserInfo</a-button>
             <EditModel :id="id"></EditModel>
           </div>
@@ -45,7 +46,8 @@
               ActualName :
               {{ user.name === null || user.name === "" ? "匿名" : user.name }}
             </h6>
-            <h6>CardNo : {{ cardNo }}</h6>
+            <h6 class="w22rem">CardNo : {{ cardNo }}</h6>
+            <a-button @click="deleteUser" type="danger">Delete</a-button>
           </div>
         </div>
       </a-form>
@@ -56,9 +58,10 @@
 import store from "@/store";
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
+import { message, Modal } from "ant-design-vue";
 import { UploadChangeParam, UploadFile } from "ant-design-vue/types/upload";
 import EditModel from "./EditModel.vue";
+import router from "@/router";
 export default defineComponent({
   name: "UserInfo",
   components: {
@@ -87,21 +90,35 @@ export default defineComponent({
       Authorization: `Bearer ${store.state.login.token}`,
     });
     const findUser = async () => {
-      await store.dispatch("UserInfoFind", {
+      await store.dispatch("user/UserInfoFind", {
         id: props.id,
         mutations: "UserInfoFind",
       });
     };
     const showModal = async () => {
-      store.commit("UserChangeShowModel", true);
+      store.commit("user/UserChangeShowModel", true);
+    };
+    const deleteUser = () => {
+      Modal.confirm({
+        title: "Do you want to delete this user?",
+        content:
+          "If you delete this user, the user may be bound to other modules.",
+        async onOk() {
+          await store.dispatch("user/UserDeleteUser", props.id);
+          router.push("/user");
+        },
+        onCancel() {
+          message.info("取消删除");
+        },
+      });
     };
     onMounted(() => {
       findUser();
     });
     const handleChange = async (info: UploadChangeParam<UploadFile>) => {
       if (info.file.status == "done") {
-        await store.commit("UserUploadedAvatar", info.file.response);
-        await store.dispatch(`UserInfoEdit`, {
+        await store.commit("user/UserUploadedAvatar", info.file.response);
+        await store.dispatch(`user/UserInfoEdit`, {
           user: store.state.user.user,
           id: props.id,
         });
@@ -134,6 +151,7 @@ export default defineComponent({
       HeaderStatus,
       handleChange,
       beforeUpload,
+      deleteUser,
     };
   },
 });
