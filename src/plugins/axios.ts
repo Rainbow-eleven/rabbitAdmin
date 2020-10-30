@@ -23,12 +23,16 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   function(response) {
     // 对响应数据做点什么
-    store.commit("loading/ChangeLoading", false);
+    setTimeout(() => {
+      store.commit("loading/ChangeLoading", false);
+    }, 500);
     return response;
   },
   function(error) {
     // 对响应错误做点什么
-    store.commit("loading/ChangeLoading", false);
+    setTimeout(() => {
+      store.commit("loading/ChangeLoading", false);
+    }, 500);
     if (error.response.status === 401) {
       const data = {
         code: 500,

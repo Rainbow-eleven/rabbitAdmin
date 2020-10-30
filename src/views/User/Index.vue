@@ -1,16 +1,15 @@
 <template>
   <div>
-    <a-button class="mb-2"
+    <!-- <a-button class="mb-2"
       ><router-link to="/user/create">Create</router-link></a-button
-    >
+    > -->
     <a-table :pagination="pagination" :columns="columns" :data-source="data">
       <template #avatar="{text}">
         <img
-          class="hover-hand"
-          style="border-radius:0.275rem"
+          class="hover-hand table-avatar"
           :src="text"
-          width="50"
-          height="50"
+          width="75"
+          height="75"
           alt="avatar"
         />
       </template>
@@ -75,4 +74,3 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss"></style>

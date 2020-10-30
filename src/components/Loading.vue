@@ -1,13 +1,15 @@
 <template>
-  <teleprot to="#loading">
-    <div
-      class="d-flex justify-content-center align-items-center h-100 w-100 loading-container"
-    >
-      <div class="loading-content">
-        <a-spin size="large"></a-spin>
+  <div>
+    <teleprot to="#loading">
+      <div
+        class="d-flex justify-content-center align-items-center h-100 w-100 loading-container"
+      >
+        <div class="loading-content">
+          <a-spin size="large"></a-spin>
+        </div>
       </div>
-    </div>
-  </teleprot>
+    </teleprot>
+  </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";

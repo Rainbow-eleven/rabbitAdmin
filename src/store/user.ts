@@ -1,7 +1,8 @@
+import { ColumnProp } from "./index";
 import { LoginInfo } from "./login";
 import { message } from "ant-design-vue";
 import { Module } from "vuex";
-import { GlobalStore, asyncAndCommit, returnMessage } from ".";
+import { GlobalStore, asyncAndCommit, returnMessage, MessageResult } from ".";
 export interface UserInfo {
   isLogin?: boolean;
   id?: number;
@@ -16,27 +17,12 @@ export interface UserInfo {
   updatedTime?: string;
   key?: number;
 }
-interface SlotProp {
-  customRender: string;
-}
 export interface OssResult {
   message: string;
   path: string;
   src: string;
   srcSign: string;
   uploaded: boolean;
-}
-interface ColumnProp {
-  title?: string;
-  dataIndex?: string;
-  width?: string;
-  slots: SlotProp;
-  key?: string;
-}
-export interface MessageResult {
-  statusCode: number;
-  data?: unknown;
-  message: string;
 }
 export interface UserEdit {
   user: UserInfo;
@@ -155,15 +141,10 @@ const ModuleUser: Module<GlobalUserStore, GlobalStore> = {
       });
     },
     async UserInfoEdit({ commit }, userEdit: UserEdit) {
-      return asyncAndCommit(
-        `/user/${userEdit.id}`,
-        "UserInfoEdit",
-        commit,
-        {
-          method: "put",
-          data: userEdit.user,
-        }
-      );
+      return asyncAndCommit(`/user/${userEdit.id}`, "UserInfoEdit", commit, {
+        method: "put",
+        data: userEdit.user,
+      });
     },
     async UserVolidatePass({ commit }, oldPass: PasswordProp) {
       return asyncAndCommit(
@@ -177,15 +158,10 @@ const ModuleUser: Module<GlobalUserStore, GlobalStore> = {
       );
     },
     async UserUpdatePassword({ commit }, newPass: PasswordProp) {
-      return asyncAndCommit(
-        `/user/updatePass`,
-        "UserUpdatePassword",
-        commit,
-        {
-          method: "post",
-          data: newPass,
-        }
-      );
+      return asyncAndCommit(`/user/updatePass`, "UserUpdatePassword", commit, {
+        method: "post",
+        data: newPass,
+      });
     },
     async UserSendEmail({ commit }, account: string) {
       return asyncAndCommit(`/email/${account}`, "UserSendEmail", commit);
@@ -201,35 +177,41 @@ const ModuleUser: Module<GlobalUserStore, GlobalStore> = {
       {
         title: "avatar",
         dataIndex: "faceUrl",
+        align: "center",
         width: "10%",
         slots: { customRender: "avatar" },
       },
       {
         title: "account",
         dataIndex: "account",
+        align: "center",
         width: "15%",
         slots: { customRender: "account" },
       },
       {
         title: "nickName",
         dataIndex: "username",
-        width: "10%",
+        align: "center",
+        width: "15%",
         slots: { customRender: "username" },
       },
       {
         title: "actual name",
+        align: "center",
         dataIndex: "name",
-        width: "10%",
+        width: "15%",
         slots: { customRender: "actualName" },
       },
       {
         title: "isAuthentication",
         dataIndex: "isAuthentication",
+        align: "center",
+        width: "15%",
         slots: { customRender: "isAuthentication" },
       },
       {
         title: "Action",
-        width: "7.5%",
+        align: "center",
         dataIndex: "",
         key: "x",
         slots: { customRender: "action" },

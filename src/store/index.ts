@@ -1,8 +1,9 @@
+import { ModuleClassify, GlobalClassifyProp } from "./classify";
 import { Commit, createStore } from "vuex";
 import axios, { AxiosRequestConfig } from "axios";
 import ModuleLogin, { GlobalLoginStore } from "./login";
 import ModuleLoading, { GlobalLoadingStore } from "./loading";
-import ModuleUser, { GlobalUserStore, MessageResult } from "./user";
+import ModuleUser, { GlobalUserStore } from "./user";
 import { message } from "ant-design-vue";
 import router from "@/router";
 import ModuleReg, { GlobalRegStore } from "./Reg";
@@ -12,6 +13,23 @@ export interface GlobalStore {
   loading: GlobalLoadingStore;
   user: GlobalUserStore;
   reg: GlobalRegStore;
+  classify: GlobalClassifyProp;
+}
+export interface MessageResult {
+  statusCode: number;
+  data?: undefined;
+  message: string;
+}
+interface SlotProp {
+  customRender: string;
+}
+export interface ColumnProp {
+  title?: string;
+  dataIndex?: string;
+  width?: string;
+  slots?: SlotProp;
+  key?: string;
+  align?: string;
 }
 export const asyncAndCommit = async (
   url: string,
@@ -41,22 +59,36 @@ export default createStore<GlobalStore>({
       router.go(-1);
     },
   },
-  actions: {
-  },
-  modules: {
-    login: ModuleLogin,
-    loading: ModuleLoading,
-    user: ModuleUser,
-    reg: ModuleReg,
-  },
   getters: {
     createdTimeYear: (state) => {
       return state.user.user.createdTime?.slice(0, 10);
+    },
+    classifys(state) {
+      return state.classify.dataSource.map((item) => {
+        return {
+          ...item,
+          createdTime:
+            item.createdTime?.slice(0, 10) +
+            " " +
+            item.createdTime?.slice(11, 16),
+          updatedTime:
+            item.updatedTime?.slice(0, 10) +
+            " " +
+            item.updatedTime?.slice(11, 16),
+        };
+      });
     },
     HideCardNo: (state) => {
       return state.user.user.cardNo?.length === 18
         ? state.user.user.cardNo?.slice(0, 14) + "####"
         : "";
     },
+  },
+  modules: {
+    login: ModuleLogin,
+    loading: ModuleLoading,
+    user: ModuleUser,
+    reg: ModuleReg,
+    classify: ModuleClassify,
   },
 });

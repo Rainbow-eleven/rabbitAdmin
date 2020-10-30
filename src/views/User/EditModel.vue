@@ -51,8 +51,7 @@
 </template>
 <script lang="ts">
 import router from "@/router";
-import store from "@/store";
-import { MessageResult } from "@/store/user";
+import store, { MessageResult } from "@/store";
 import { message } from "ant-design-vue";
 import { computed, defineComponent, onMounted } from "vue";
 import UpdatePassword from "./UpdatePassword.vue";

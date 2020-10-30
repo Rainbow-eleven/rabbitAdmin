@@ -22,6 +22,7 @@ import {
   Modal,
   Radio,
   AutoComplete,
+  Switch,
 } from "ant-design-vue";
 
 createApp(App)
@@ -32,6 +33,7 @@ createApp(App)
   .use(Table)
   .use(Tag)
   .use(AutoComplete)
+  .use(Switch)
   .use(Carousel)
   .use(PageHeader)
   .use(Tooltip)

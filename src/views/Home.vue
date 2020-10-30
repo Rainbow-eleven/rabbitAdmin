@@ -31,7 +31,7 @@
         />
         <a-dropdown class="mr-2 hover-hand" :trigger="['click']">
           <template v-slot:overlay>
-            <a-menu @click="handleMenuClick">
+            <a-menu>
               <a-menu-item key="1" @click="linkToInfo"
                 ><UserOutlined />Person Info</a-menu-item
               >
@@ -94,7 +94,7 @@ export default defineComponent({
     const collapsed = ref(false);
     const router = useRouter();
     const selectedKeys = ref([]);
-    const menuData = ref(["user", "model"]);
+    const menuData = ref(["user", "classify"]);
     const user = computed(() => store.state.login.user);
     const routerPush = (path: string) => {
       router.push(path);

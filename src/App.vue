@@ -1,10 +1,12 @@
 <template>
-  <Loading v-if="isLoading"></Loading>
-  <router-view v-slot="{ Component }">
-    <transition name="fade" mode="out-in">
-      <component :is="Component"></component>
-    </transition>
-  </router-view>
+  <div>
+    <Loading v-if="isLoading"></Loading>
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component"></component>
+      </transition>
+    </router-view>
+  </div>
 </template>
 <script lang="ts">
 import { computed, defineComponent } from "vue";

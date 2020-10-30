@@ -32,7 +32,7 @@ import { useRouter } from "vue-router";
 import { useForm } from "@ant-design-vue/use";
 import store from "@/store";
 import { LoginInfo } from "@/store/login";
-import { MessageResult } from '@/store/user';
+import { MessageResult } from "@/store";
 
 export default defineComponent({
   setup() {
