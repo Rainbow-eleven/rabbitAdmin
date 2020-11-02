@@ -7,6 +7,8 @@ import ModuleUser, { GlobalUserStore } from "./user";
 import { message } from "ant-design-vue";
 import router from "@/router";
 import ModuleReg, { GlobalRegStore } from "./Reg";
+import { GlobalWelStore, ModuleWelcome } from "./welcome";
+import { ModuleDashBoard, GlobalDashBoardProps } from './dashBoard';
 
 export interface GlobalStore {
   login: GlobalLoginStore;
@@ -14,6 +16,8 @@ export interface GlobalStore {
   user: GlobalUserStore;
   reg: GlobalRegStore;
   classify: GlobalClassifyProp;
+  wel: GlobalWelStore;
+  dashBoard: GlobalDashBoardProps;
 }
 export interface MessageResult {
   statusCode: number;
@@ -60,6 +64,11 @@ export default createStore<GlobalStore>({
     },
   },
   getters: {
+    headerStatus: (state) => {
+      return {
+        Authorization: `bearer ${state.login.token}`,
+      };
+    },
     createdTimeYear: (state) => {
       return state.user.user.createdTime?.slice(0, 10);
     },
@@ -83,6 +92,34 @@ export default createStore<GlobalStore>({
         ? state.user.user.cardNo?.slice(0, 14) + "####"
         : "";
     },
+    getMonth() {
+      switch (new Date().getMonth() + 1) {
+        case 1:
+          return "Jan";
+        case 2:
+          return "Feb";
+        case 3:
+          return "Mar";
+        case 4:
+          return "Apr";
+        case 5:
+          return "May";
+        case 6:
+          return "Jun";
+        case 7:
+          return "Jul";
+        case 8:
+          return "Aug";
+        case 9:
+          return "Sept";
+        case 10:
+          return "Oct";
+        case 11:
+          return "Nov";
+        case 12:
+          return "Dec";
+      }
+    },
   },
   modules: {
     login: ModuleLogin,
@@ -90,5 +127,7 @@ export default createStore<GlobalStore>({
     user: ModuleUser,
     reg: ModuleReg,
     classify: ModuleClassify,
+    wel: ModuleWelcome,
+    dashBoard: ModuleDashBoard,
   },
 });

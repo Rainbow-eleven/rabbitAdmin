@@ -5,9 +5,9 @@
       <a-menu theme="dark" v-model:selectedKeys="selectedKeys" mode="inline">
         <a-menu-item
           class="justify-content-start"
-          @click="routerPush(`/${item}`)"
+          @click="linkRouter(index)"
           :key="item"
-          v-for="item in menuData"
+          v-for="(item, index) in menuData"
         >
           <user-outlined />
           <span>{{ item }}</span>
@@ -94,10 +94,14 @@ export default defineComponent({
     const collapsed = ref(false);
     const router = useRouter();
     const selectedKeys = ref([]);
-    const menuData = ref(["user", "classify"]);
+    const menuData = ref(["home","user", "classify"]);
+    const routerData = ref(["/","/user", "/classify"]);
     const user = computed(() => store.state.login.user);
     const routerPush = (path: string) => {
       router.push(path);
+    };
+    const linkRouter = (index: number) => {
+      router.push(routerData.value[index]);
     };
     const logout = () => {
       store.commit("logout");
@@ -121,6 +125,7 @@ export default defineComponent({
       menuData,
       user,
       linkToInfo,
+      linkRouter,
     };
   },
 });

@@ -1,0 +1,38 @@
+.tipCardBox {
+  .mr-card {
+    .tipsLogo {
+      font-size: 1.25rem;
+      .anticon-bulb {
+        padding: 0.55rem;
+        border-radius: 50%;
+      }
+    }
+    .tipsTitle {
+      font-size: 1.55rem;
+      color: #333;
+    }
+    .close {
+      margin-top: -1rem;
+    }
+    button {
+      padding: 0;
+      font-size: 1.25rem;
+      color: #333;
+    }
+    .tipsContent {
+      width: 35%;
+      font-size: 1.3rem;
+    }
+    margin: 0 auto;
+    float: right;
+    width: 24rem;
+    height: 28rem;
+    background-image: url("https://czh1010.oss-cn-beijing.aliyuncs.com/cardBg.jpg");
+    background-size: cover;
+    background-position: center center;
+    border: 1px solid rgba($color: #e4e4e4, $alpha: 1);
+    box-shadow: 0 0 5px rgba($color: #e4e4e4, $alpha: 0.2);
+    border-radius: 2rem;
+  }
+  flex: 1;
+}

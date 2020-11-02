@@ -132,7 +132,6 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "@/assets/css/fade.scss";
 .ant-form {
   input,
   button {

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <a-button class="mb-2" size="large">Create</a-button>
+    <a-button class="mb-3" size="large"
+      ><router-link to="/classify/edit">Create</router-link></a-button
+    >
     <a-table bordered :data-source="dataSource" :columns="columns">
       <template #classifyName="{text}">
         <h5 class="text-center">{{ text }}</h5>

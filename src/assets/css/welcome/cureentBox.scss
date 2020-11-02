@@ -1,0 +1,24 @@
+.currentTimeBox {
+  margin-top: 3.5rem;
+  .ant-btn {
+    .time {
+      color: #6236ff;
+      font-style: italic;
+      font-size: 2.05rem;
+      font-weight: bold;
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+      span {
+        letter-spacing: 0.15rem;
+      }
+    }
+    .desc {
+      font-weight: bold;
+    }
+    flex: 1;
+    margin: 0 0.75rem;
+    height: 6.5rem;
+    border-radius: 1.25rem;
+    text-align: left;
+  }
+}

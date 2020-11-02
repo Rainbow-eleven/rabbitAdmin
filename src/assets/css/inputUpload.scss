@@ -1,0 +1,30 @@
+@mixin input-upload(
+  $upload_w: 10rem,
+  $upload_h: 10rem,
+  $colors: #666,
+  $padding: 0rem
+) {
+  .ant-upload-picture-card-wrapper {
+    padding: $padding;
+    width: auto;
+  }
+  .avatar-uploader > .ant-upload {
+    width: $upload_w;
+    height: $upload_h;
+    img {
+      width: auto;
+      display: inline-block;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+  .ant-upload-select-picture-card i {
+    font-size: 4rem;
+    color: #eee;
+  }
+  .ant-upload-select-picture-card .ant-upload-text {
+    margin-top: 8px;
+    color: $colors;
+  }
+}

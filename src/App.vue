@@ -28,6 +28,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-@import "./assets/css/fade.scss";
+@import "./assets/css/transition/fade.scss";
+@import "@/assets/css/transition/spin.scss";
 @import "./assets/css/global.scss";
 </style>

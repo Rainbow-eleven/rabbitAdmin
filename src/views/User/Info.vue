@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="userInfoBox">
     <a-page-header title="User" sub-title="Information" @back="backToGo" />
     <div class="infoBox bg-light mt-3">
       <a-form layout="inline" class="d-flex align-items-center">
@@ -86,9 +86,7 @@ export default defineComponent({
     const cardNo = computed(() => {
       return store.getters.HideCardNo;
     });
-    const HeaderStatus = ref({
-      Authorization: `Bearer ${store.state.login.token}`,
-    });
+    const HeaderStatus = computed(() => store.getters.headerStatus);
     const findUser = async () => {
       await store.dispatch("user/UserInfoFind", {
         id: props.id,
@@ -158,4 +156,6 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @import "@/assets/css/UserInfo.scss";
+@import "@/assets/css/inputUpload.scss";
+@include input-upload(15rem, 15rem, null, 1.25rem);
 </style>

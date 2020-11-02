@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex regBox">
     <a-carousel class="swiper" effect="fade" autoplay :dots="false">
       <div class="bgBox" v-for="item in bgList" :key="item">
         <div class="bg" :style="`background-image: url(${item})`"></div>

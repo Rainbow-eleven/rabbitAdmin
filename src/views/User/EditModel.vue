@@ -1,53 +1,55 @@
 <template>
-  <a-modal
-    title="Edit User"
-    :visible="visible"
-    @ok="handleOk"
-    @cancel="handleCancel"
-    keyboard="true"
-  >
-    <a-form :label-col="4" :model="userEditInfo">
-      <a-form-item label="account">
-        <a-input allowClear v-model:value="userEditInfo.account"></a-input>
-      </a-form-item>
-      <a-form-item label="username">
-        <a-input allowClear v-model:value="userEditInfo.username"></a-input>
-      </a-form-item>
-      <a-form-item label="actualName">
-        <a-input allowClear v-model:value="userEditInfo.name"></a-input>
-      </a-form-item>
-      <a-form-item label="cardNo">
-        <a-input
-          @input="watchCardNo"
-          allowClear
-          v-model:value="userEditInfo.cardNo"
-        ></a-input>
-      </a-form-item>
-      <a-form-item label="Verified">
-        <a-radio-group
-          v-model:value="userEditInfo.isAuthentication"
-          button-style="solid"
-        >
-          <a-radio-button
-            :value="0"
-            :disabled="userEditInfo.cardNo.length == 18"
+  <div class="editUserModel">
+    <a-modal
+      title="Edit User"
+      :visible="visible"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      keyboard="true"
+    >
+      <a-form :label-col="4" :model="userEditInfo">
+        <a-form-item label="account">
+          <a-input allowClear v-model:value="userEditInfo.account"></a-input>
+        </a-form-item>
+        <a-form-item label="username">
+          <a-input allowClear v-model:value="userEditInfo.username"></a-input>
+        </a-form-item>
+        <a-form-item label="actualName">
+          <a-input allowClear v-model:value="userEditInfo.name"></a-input>
+        </a-form-item>
+        <a-form-item label="cardNo">
+          <a-input
+            @input="watchCardNo"
+            allowClear
+            v-model:value="userEditInfo.cardNo"
+          ></a-input>
+        </a-form-item>
+        <a-form-item label="Verified">
+          <a-radio-group
+            v-model:value="userEditInfo.isAuthentication"
+            button-style="solid"
           >
-            No
-          </a-radio-button>
-          <a-radio-button
-            :value="1"
-            :disabled="userEditInfo.cardNo.length !== 18"
-          >
-            Yes
-          </a-radio-button>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item label="password">
-        <a-button @click="showPass" type="danger">UpdatePassword</a-button>
-      </a-form-item>
-    </a-form>
-  </a-modal>
-  <UpdatePassword :id="id"></UpdatePassword>
+            <a-radio-button
+              :value="0"
+              :disabled="userEditInfo.cardNo.length == 18"
+            >
+              No
+            </a-radio-button>
+            <a-radio-button
+              :value="1"
+              :disabled="userEditInfo.cardNo.length !== 18"
+            >
+              Yes
+            </a-radio-button>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item label="password">
+          <a-button @click="showPass" type="danger">UpdatePassword</a-button>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+    <UpdatePassword :id="id"></UpdatePassword>
+  </div>
 </template>
 <script lang="ts">
 import router from "@/router";
@@ -130,20 +132,22 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss" scoped>
-.pass {
-  input,
-  button {
-    height: 3.25rem;
+<style lang="scss">
+.editUserModel {
+  .pass {
+    input,
+    button {
+      height: 3.25rem;
+    }
   }
-}
-.ant-form-item {
-  display: flex;
-  .ant-form-item-label {
-    flex: 4;
-  }
-  .ant-form-item-control-wrapper {
-    flex: 12;
+  .ant-form-item {
+    display: flex;
+    .ant-form-item-label {
+      flex: 4;
+    }
+    .ant-form-item-control-wrapper {
+      flex: 12;
+    }
   }
 }
 </style>

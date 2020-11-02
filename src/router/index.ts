@@ -9,6 +9,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("../views/Home.vue"),
     children: [
       {
+        path: "/",
+        name: "Welcome",
+        component: () => import("../views/Welcome/Welcome.vue"),
+      },
+      {
         path: "/user",
         name: "User",
         component: () => import("../views/User/Index.vue"),
@@ -28,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/classify",
         name: "Classify",
         component: () => import("../views/Classify/Index.vue"),
+      },
+      {
+        path: "/classify/edit",
+        name: "ClassifyCreate",
+        component: () => import("../views/Classify/Create.vue"),
       },
     ],
   },

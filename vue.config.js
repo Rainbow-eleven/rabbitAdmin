@@ -13,6 +13,9 @@ module.exports = {
     },
   },
   configureWebpack: (config) => {
+    externals: {
+      echarts: 'echarts' // 配置使用CDN，
+    }
     // 生产环境相关配置
     if (isProduction) {
       //gzip压缩
@@ -28,5 +31,5 @@ module.exports = {
         })
       );
     }
-  },
+  }
 };

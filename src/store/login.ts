@@ -117,10 +117,15 @@ const ModuleLogin: Module<GlobalLoginStore, GlobalStore> = {
       context: ActionContext<GlobalLoginStore, GlobalStore>,
       loginInfo: LoginInfo
     ) {
-      return asyncAndCommit("/login", "LoginFinish", context.commit, {
-        method: "post",
-        data: loginInfo,
-      });
+      const { account, password } = loginInfo;
+      return asyncAndCommit(
+        `/login/${account}/${password}`,
+        "LoginFinish",
+        context.commit,
+        {
+          method: "post",
+        }
+      );
     },
   },
   getters: {},
