@@ -8,7 +8,8 @@ import { message } from "ant-design-vue";
 import router from "@/router";
 import ModuleReg, { GlobalRegStore } from "./Reg";
 import { GlobalWelStore, ModuleWelcome } from "./welcome";
-import { ModuleDashBoard, GlobalDashBoardProps } from './dashBoard';
+import { ModuleDashBoard, GlobalDashBoardProps } from "./dashBoard";
+import { GlobalRingStore, ModuleRing } from "./ring";
 
 export interface GlobalStore {
   login: GlobalLoginStore;
@@ -18,6 +19,7 @@ export interface GlobalStore {
   classify: GlobalClassifyProp;
   wel: GlobalWelStore;
   dashBoard: GlobalDashBoardProps;
+  ring: GlobalRingStore;
 }
 export interface MessageResult {
   statusCode: number;
@@ -129,5 +131,6 @@ export default createStore<GlobalStore>({
     classify: ModuleClassify,
     wel: ModuleWelcome,
     dashBoard: ModuleDashBoard,
+    ring: ModuleRing,
   },
 });

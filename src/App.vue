@@ -31,4 +31,5 @@ export default defineComponent({
 @import "./assets/css/transition/fade.scss";
 @import "@/assets/css/transition/spin.scss";
 @import "./assets/css/global.scss";
+// @import "./assets/css/reset.scss";
 </style>

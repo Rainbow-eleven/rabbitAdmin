@@ -50,10 +50,10 @@
       </a-layout-header>
       <a-layout-content
         :style="{
-          margin: '24px 16px',
-          padding: '24px',
+          margin: '1rem 1rem',
+          padding: '1rem',
           background: '#fff',
-          minHeight: '280px',
+          height: '100vh',
         }"
       >
         <router-view v-slot="{ Component }">
@@ -94,8 +94,8 @@ export default defineComponent({
     const collapsed = ref(false);
     const router = useRouter();
     const selectedKeys = ref([]);
-    const menuData = ref(["home","user", "classify"]);
-    const routerData = ref(["/","/user", "/classify"]);
+    const menuData = ref(["home", "user", "classify"]);
+    const routerData = ref(["/", "/user", "/classify"]);
     const user = computed(() => store.state.login.user);
     const routerPush = (path: string) => {
       router.push(path);
@@ -104,7 +104,7 @@ export default defineComponent({
       router.push(routerData.value[index]);
     };
     const logout = () => {
-      store.commit("logout");
+      store.commit("login/logout");
       localStorage.removeItem("userId");
       location.href = "/login";
     };

@@ -177,27 +177,23 @@ const ModuleUser: Module<GlobalUserStore, GlobalStore> = {
       {
         title: "avatar",
         dataIndex: "faceUrl",
-        align: "center",
         width: "10%",
         slots: { customRender: "avatar" },
       },
       {
         title: "account",
         dataIndex: "account",
-        align: "center",
         width: "15%",
         slots: { customRender: "account" },
       },
       {
         title: "nickName",
         dataIndex: "username",
-        align: "center",
         width: "15%",
         slots: { customRender: "username" },
       },
       {
         title: "actual name",
-        align: "center",
         dataIndex: "name",
         width: "15%",
         slots: { customRender: "actualName" },
@@ -205,13 +201,11 @@ const ModuleUser: Module<GlobalUserStore, GlobalStore> = {
       {
         title: "isAuthentication",
         dataIndex: "isAuthentication",
-        align: "center",
         width: "15%",
         slots: { customRender: "isAuthentication" },
       },
       {
         title: "Action",
-        align: "center",
         dataIndex: "",
         key: "x",
         slots: { customRender: "action" },

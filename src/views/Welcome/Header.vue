@@ -45,6 +45,7 @@ export default defineComponent({
 .welHeader {
   .rabbit {
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    font-size: 2rem;
   }
   .ant-btn {
     height: 3.75rem;

@@ -1,9 +1,11 @@
 <template>
   <div class="dashBoard">
-    <VEcharts :option="option" style="height:25rem"></VEcharts>
+    <VEcharts :option="option" style="height:25rem" class="canvas"></VEcharts>
     <div class="d-flex mt-2 justify-content-center align-items-center">
-      <h3 class="font-weight-bold mr-2">privated by</h3>
-      <h1 class="text-center text-black-50 font-weight-bold font-italic">
+      <h3 class="fs-2 font-weight-bold mr-2">privated by</h3>
+      <h1
+        class="fs-2-25 text-center text-black-50 font-weight-bold font-italic"
+      >
         Muddyrain
       </h1>
     </div>

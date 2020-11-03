@@ -34,20 +34,46 @@ export default defineComponent({
     };
   },
   setup() {
-    const hr = ref(0);
+    const hr = ref<number | string>(0);
     const min = ref(0);
     const sec = ref(0);
     onMounted(() => {
+      store.commit("wel/getTime");
       setInterval(async () => {
         await store.commit("wel/getTime");
-        store.state.wel.time.slice(0, 2);
         if (store.state.wel.time.slice(0, 2) == "下午") {
-          hr.value = parseInt(store.state.wel.time.slice(2, 3)) + 12;
+          if (parseInt(store.state.wel.time.slice(2, 4)) !== 12) {
+            if (parseInt(store.state.wel.time.slice(2, 4)) < 10) {
+              hr.value = parseInt(store.state.wel.time.slice(2, 4)) + 12;
+              min.value = parseInt(store.state.wel.time.slice(4, 6));
+              sec.value = parseInt(store.state.wel.time.slice(7, 9));
+            } else {
+              hr.value = parseInt(store.state.wel.time.slice(2, 4)) + 12;
+              min.value = parseInt(store.state.wel.time.slice(5, 7));
+              sec.value = parseInt(store.state.wel.time.slice(8, 10));
+            }
+          } else {
+            hr.value = parseInt(store.state.wel.time.slice(2, 4));
+            min.value = parseInt(store.state.wel.time.slice(5, 7));
+            sec.value = parseInt(store.state.wel.time.slice(8, 10));
+          }
         } else {
-          hr.value = parseInt(store.state.wel.time.slice(2, 3));
+          if (parseInt(store.state.wel.time.slice(2, 4)) >= 10) {
+            if (parseInt(store.state.wel.time.slice(2, 4)) == 12) {
+              hr.value = "00";
+              min.value = parseInt(store.state.wel.time.slice(5, 7));
+              sec.value = parseInt(store.state.wel.time.slice(8, 10));
+            } else {
+              hr.value = parseInt(store.state.wel.time.slice(2, 4));
+              min.value = parseInt(store.state.wel.time.slice(5, 7));
+              sec.value = parseInt(store.state.wel.time.slice(8, 10));
+            }
+          } else {
+            hr.value = parseInt(store.state.wel.time.slice(2, 4));
+            min.value = parseInt(store.state.wel.time.slice(4, 6));
+            sec.value = parseInt(store.state.wel.time.slice(7, 9));
+          }
         }
-        min.value = parseInt(store.state.wel.time.slice(4, 6));
-        sec.value = parseInt(store.state.wel.time.slice(7, 9));
       }, 1000);
     });
     return {
@@ -60,5 +86,4 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @import "@/assets/css/welcome/cureentBox.scss";
-
 </style>
