@@ -39,6 +39,28 @@ const routes: Array<RouteRecordRaw> = [
         name: "ClassifyCreate",
         component: () => import("../views/Classify/Create.vue"),
       },
+      {
+        path: "/classify/edit/:id",
+        name: "ClassifyEdit",
+        props: true,
+        component: () => import("../views/Classify/Create.vue"),
+      },
+      {
+        path: "/brand",
+        name: "Brand",
+        component: () => import("../views/Brand/Brand.vue"),
+      },
+      {
+        path: "/brand/edit",
+        name: "BrandEdit",
+        component: () => import("../views/Brand/BrandEdit.vue"),
+      },
+      {
+        path: "/brand/edit/:id",
+        name: "BrandEdit",
+        props: true,
+        component: () => import("../views/Brand/BrandEdit.vue"),
+      },
     ],
   },
   {

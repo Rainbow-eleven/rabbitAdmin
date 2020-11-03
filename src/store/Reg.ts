@@ -23,21 +23,21 @@ const ModuleReg: Module<GlobalRegStore, GlobalStore> = {
         {
           required: true,
           message: "Please input Nick name",
-          trigger: "blur",
+          trigger: "change",
         },
       ],
       password: [
         {
           required: true,
           message: "Please input Password",
-          trigger: "blur",
+          trigger: "change",
         },
       ],
       account: [
         {
           required: true,
           message: "Please input Account Email",
-          trigger: "blur",
+          trigger: "change",
           type: "email",
         },
       ],
@@ -45,7 +45,7 @@ const ModuleReg: Module<GlobalRegStore, GlobalStore> = {
         {
           required: true,
           message: "Please input Verification code",
-          trigger: "blur",
+          trigger: "change",
         },
       ],
     },

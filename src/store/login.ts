@@ -46,20 +46,20 @@ const ModuleLogin: Module<GlobalLoginStore, GlobalStore> = {
           required: true,
           type: "email",
           message: "Please enter your email",
-          trigger: "blur",
+          trigger: "change",
         },
       ],
       password: [
         {
           required: true,
           message: "Please enter your password",
-          trigger: "blur",
+          trigger: "change",
         },
       ],
     },
     fromInput: {
-      account: "",
-      password: "",
+      account: "qiu3291002845@gmail.com",
+      password: "123456",
     },
   },
   mutations: {

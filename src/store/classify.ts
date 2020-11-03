@@ -1,30 +1,71 @@
+import { message } from "ant-design-vue";
 import { asyncAndCommit } from "./index";
 import { PaginationProp } from "./user";
 import { GlobalStore, ColumnProp } from ".";
 import { Module } from "vuex";
 type boolType = 0 | 1;
 export interface ClassifyProp {
-  id: string;
-  classifyName: string;
-  icon: string;
-  bigIcon: string;
-  description: string;
-  status: boolType;
-  createdUserId: null;
-  updatedUserId: null;
-  createdTime: string;
-  updatedTime: string;
-  isDelete: boolType;
+  id?: string;
+  classifyName?: string;
+  icon?: string;
+  bigIcon?: string;
+  description?: string;
+  status?: boolType;
+  createdUserId?: null;
+  updatedUserId?: null;
+  createdTime?: string;
+  updatedTime?: string;
+  isDelete?: boolType;
 }
 export interface GlobalClassifyProp {
   pagination: PaginationProp;
   dataSource: ClassifyProp[];
   columns: ColumnProp[];
+  classify: ClassifyProp;
+  classifyUpdate: ClassifyProp;
+  rules: {};
 }
 export const ModuleClassify: Module<GlobalClassifyProp, GlobalStore> = {
   state: {
+    rules: {
+      classifyName: [
+        {
+          required: true,
+          message: "Please input classifyName",
+          trigger: "change",
+        },
+      ],
+      description: [
+        {
+          required: true,
+          message: "Please input description",
+          trigger: "change",
+        },
+      ],
+      icon: [
+        {
+          required: true,
+          message: "Please change icon",
+          trigger: "change",
+        },
+      ],
+      bigIcon: [
+        {
+          required: true,
+          message: "Please change bigIcon",
+          trigger: "change",
+        },
+      ],
+    },
+    classify: {
+      classifyName: "",
+      description: "",
+      icon: "",
+      bigIcon: "",
+    },
+    classifyUpdate: {},
     pagination: {
-      pageSize: 10,
+      pageSize: 6,
       total: 0,
       hideOnSinglePage: true,
       simple: true,
@@ -69,14 +110,14 @@ export const ModuleClassify: Module<GlobalClassifyProp, GlobalStore> = {
       {
         title: "status",
         align: "center",
-        dataIndex: "status",
+        dataIndex: "",
         width: "15%",
         slots: { customRender: "status" },
       },
       {
         title: "isDelete",
         align: "center",
-        dataIndex: "isDelete",
+        dataIndex: "",
         width: "15%",
         slots: { customRender: "isDelete" },
       },
@@ -90,16 +131,63 @@ export const ModuleClassify: Module<GlobalClassifyProp, GlobalStore> = {
     ],
   },
   mutations: {
-    findClassify(state, res) {
+    findClassifys(state, res) {
       state.dataSource = res.data;
       state.dataSource.map((item: ClassifyProp, index: number) => {
         return Object.assign(item, { key: index });
       });
     },
+    findClassify(state, res) {
+      state.classify = res.data;
+      state.classifyUpdate = res.data;
+    },
+    changeUploadIcon(state, response) {
+      state.classify.icon = response.src;
+    },
+    changeUploadBigIcon(state, response) {
+      state.classify.bigIcon = response.src;
+    },
+    createClassify(state, res) {
+      if (res.statusCode == 200) {
+        message.success(res.message);
+      } else {
+        message.error(res.message);
+      }
+    },
+    toggleStatus(state, num) {
+      state.classify.status = num;
+    },
+    toggleIsDelete(state, num) {
+      state.classify.isDelete = num;
+    },
+    clearClassify(state) {
+      state.classify = {
+        classifyName: "",
+        description: "",
+        icon: "",
+        bigIcon: "",
+      };
+      state.classifyUpdate = {};
+    },
   },
   actions: {
-    findClassify({ commit }) {
-      return asyncAndCommit(`/classify`, "findClassify", commit);
+    findClassifys({ commit }) {
+      return asyncAndCommit(`/classify`, "findClassifys", commit);
+    },
+    findClassify({ commit }, id) {
+      return asyncAndCommit(`/classify/${id}`, "findClassify", commit);
+    },
+    createClassify({ commit }, data) {
+      return asyncAndCommit(`/classify`, "createClassify", commit, {
+        method: "post",
+        data,
+      });
+    },
+    updateClassify({ commit }, data) {
+      return asyncAndCommit(`/classify/${data.id}`, "createClassify", commit, {
+        method: "put",
+        data: data.res,
+      });
     },
   },
   namespaced: true,

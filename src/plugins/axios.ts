@@ -36,7 +36,7 @@ axios.interceptors.response.use(
     if (error.response.status === 401) {
       const data = {
         code: 500,
-        message: "登录时长已失效,请重新登陆",
+        message: "The login time has expired, please log in again",
       };
       message.info(data.message);
       localStorage.removeItem("token");
@@ -46,9 +46,9 @@ axios.interceptors.response.use(
     if (error.response.status === 500) {
       const data = {
         code: -1,
-        message: "该用户正在与其他数据进行关联,请取消关联再进行操作",
+        message: "The data request failed, please check the code and try again",
       };
-      message.info("该用户正在与其他数据进行关联,请取消关联再进行操作");
+      message.info("The data request failed, please check the code and try again");
       return Promise.reject(data);
     }
     return Promise.reject(error);

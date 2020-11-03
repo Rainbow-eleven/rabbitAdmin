@@ -9,7 +9,10 @@
           :key="item"
           v-for="(item, index) in menuData"
         >
-          <user-outlined />
+          <AndroidOutlined v-if="index == 0" />
+          <user-outlined v-if="index == 1" />
+          <BarsOutlined v-if="index == 2" />
+          <HeatMapOutlined v-if="index == 3" />
           <span>{{ item }}</span>
         </a-menu-item>
       </a-menu>
@@ -76,6 +79,9 @@ import {
   UploadOutlined,
   DownOutlined,
   UnlockOutlined,
+  AndroidOutlined,
+  BarsOutlined,
+  HeatMapOutlined,
 } from "@ant-design/icons-vue";
 import store from "@/store";
 import { useRouter } from "vue-router";
@@ -89,13 +95,16 @@ export default defineComponent({
     VideoCameraOutlined,
     UploadOutlined,
     DownOutlined,
+    AndroidOutlined,
+    BarsOutlined,
+    HeatMapOutlined,
   },
   setup() {
     const collapsed = ref(false);
     const router = useRouter();
     const selectedKeys = ref([]);
-    const menuData = ref(["home", "user", "classify"]);
-    const routerData = ref(["/", "/user", "/classify"]);
+    const menuData = ref(["home", "user", "classify", "brand"]);
+    const routerData = ref(["/", "/user", "/classify", "/brand"]);
     const user = computed(() => store.state.login.user);
     const routerPush = (path: string) => {
       router.push(path);

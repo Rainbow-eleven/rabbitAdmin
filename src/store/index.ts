@@ -1,4 +1,5 @@
-import { ModuleClassify, GlobalClassifyProp } from "./classify";
+import { ModuleBrand, GlobalBrandStore, BrandProp } from "./brand";
+import { ModuleClassify, GlobalClassifyProp, ClassifyProp } from "./classify";
 import { Commit, createStore } from "vuex";
 import axios, { AxiosRequestConfig } from "axios";
 import ModuleLogin, { GlobalLoginStore } from "./login";
@@ -20,6 +21,7 @@ export interface GlobalStore {
   wel: GlobalWelStore;
   dashBoard: GlobalDashBoardProps;
   ring: GlobalRingStore;
+  brand: GlobalBrandStore;
 }
 export interface MessageResult {
   statusCode: number;
@@ -29,6 +31,7 @@ export interface MessageResult {
 interface SlotProp {
   customRender: string;
 }
+export type StatusType = 0 | 1;
 export interface ColumnProp {
   title?: string;
   dataIndex?: string;
@@ -37,6 +40,15 @@ export interface ColumnProp {
   key?: string;
   align?: string;
 }
+export const mapTime = (item: ClassifyProp | BrandProp) => {
+  return {
+    ...item,
+    createdTime:
+      item.createdTime?.slice(0, 10) + " " + item.createdTime?.slice(11, 16),
+    updatedTime:
+      item.updatedTime?.slice(0, 10) + " " + item.updatedTime?.slice(11, 16),
+  };
+};
 export const asyncAndCommit = async (
   url: string,
   mutationName: string,
@@ -75,19 +87,10 @@ export default createStore<GlobalStore>({
       return state.user.user.createdTime?.slice(0, 10);
     },
     classifys(state) {
-      return state.classify.dataSource.map((item) => {
-        return {
-          ...item,
-          createdTime:
-            item.createdTime?.slice(0, 10) +
-            " " +
-            item.createdTime?.slice(11, 16),
-          updatedTime:
-            item.updatedTime?.slice(0, 10) +
-            " " +
-            item.updatedTime?.slice(11, 16),
-        };
-      });
+      return state.classify.dataSource.map((item) => mapTime(item));
+    },
+    brands(state) {
+      return state.brand.data.map((item) => mapTime(item));
     },
     HideCardNo: (state) => {
       return state.user.user.cardNo?.length === 18
@@ -132,5 +135,6 @@ export default createStore<GlobalStore>({
     wel: ModuleWelcome,
     dashBoard: ModuleDashBoard,
     ring: ModuleRing,
+    brand: ModuleBrand,
   },
 });

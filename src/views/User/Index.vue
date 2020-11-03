@@ -3,7 +3,12 @@
     <!-- <a-button class="mb-2"
       ><router-link to="/user/create">Create</router-link></a-button
     > -->
-    <a-table :pagination="pagination" :columns="columns" :data-source="data">
+    <a-table
+      bordered
+      :pagination="pagination"
+      :columns="columns"
+      :data-source="data"
+    >
       <template #avatar="{text}">
         <img
           class="hover-hand table-avatar"
