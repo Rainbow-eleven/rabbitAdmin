@@ -67,10 +67,14 @@ a {
   -ms-border-radius: 0.375rem;
   -o-border-radius: 0.375rem;
 }
-.ant-input {
+.ant-input,
+.ant-select-selection {
   font-size: 1.125rem;
   height: 3.275rem;
   border-radius: 0.375rem;
+  .ant-select-selection__rendered {
+    line-height: 3.275rem;
+  }
 }
 
 .fs-1 {
@@ -102,4 +106,7 @@ a {
 }
 .fs-3 {
   font-size: rem;
+}
+.delete.ant-switch-checked {
+  background: #ff4d4f;
 }

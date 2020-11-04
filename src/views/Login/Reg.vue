@@ -9,7 +9,7 @@
       <div class="center">
         <h1>Welcome to Rabbit</h1>
         <h3 class="mt-3 mb-2">Everyday, enjoy your communication</h3>
-        <a-form class="mt-5" :rules="rules">
+        <a-form class="mt-5">
           <a-form-item v-bind="validateInfos.username">
             <a-input
               placeholder="NickName"

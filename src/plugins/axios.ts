@@ -1,4 +1,3 @@
-import router from "@/router";
 import { message } from "ant-design-vue";
 import axios from "axios";
 axios.defaults.baseURL = "http://192.168.1.101:3000";
@@ -39,8 +38,7 @@ axios.interceptors.response.use(
         message: "The login time has expired, please log in again",
       };
       message.info(data.message);
-      localStorage.removeItem("token");
-      router.push("/login");
+      localStorage.clear();
       return Promise.reject(data);
     }
     if (error.response.status === 500) {
@@ -48,7 +46,9 @@ axios.interceptors.response.use(
         code: -1,
         message: "The data request failed, please check the code and try again",
       };
-      message.info("The data request failed, please check the code and try again");
+      message.info(
+        "The data request failed, please check the code and try again"
+      );
       return Promise.reject(data);
     }
     return Promise.reject(error);

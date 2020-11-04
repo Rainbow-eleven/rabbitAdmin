@@ -23,6 +23,10 @@ import {
   Radio,
   AutoComplete,
   Switch,
+  Card,
+  Avatar,
+  Select,
+  Pagination,
 } from "ant-design-vue";
 
 createApp(App)
@@ -35,7 +39,11 @@ createApp(App)
   .use(AutoComplete)
   .use(Switch)
   .use(Carousel)
+  .use(Card)
+  .use(Select)
   .use(PageHeader)
+  .use(Pagination)
+  .use(Avatar)
   .use(Tooltip)
   .use(Dropdown)
   .use(Button)

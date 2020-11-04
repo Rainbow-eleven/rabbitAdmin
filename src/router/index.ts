@@ -52,7 +52,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "/brand/edit",
-        name: "BrandEdit",
+        name: "BrandCreate",
         component: () => import("../views/Brand/BrandEdit.vue"),
       },
       {
@@ -60,6 +60,22 @@ const routes: Array<RouteRecordRaw> = [
         name: "BrandEdit",
         props: true,
         component: () => import("../views/Brand/BrandEdit.vue"),
+      },
+      {
+        path: "/model",
+        name: "Model",
+        component: () => import("../views/Model/Model.vue"),
+      },
+      {
+        path: "/model/edit",
+        name: "ModelCreate",
+        component: () => import("../views/Model/ModelEdit.vue"),
+      },
+      {
+        path: "/model/edit/:id",
+        name: "ModelEdit",
+        props: true,
+        component: () => import("../views/Model/ModelEdit.vue"),
       },
     ],
   },

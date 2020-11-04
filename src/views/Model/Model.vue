@@ -1,0 +1,173 @@
+<template>
+  <div>
+    <a-modal
+      title="Search"
+      v-model:visible="visible"
+      :confirm-loading="confirmLoading"
+      centered
+      class="searchModel"
+      @ok="onSearch"
+      keyboard
+      @cancel="handleCancel"
+    >
+      <a-input
+        @keydown="onSearch"
+        v-model:value="keyword"
+        placeholder="Please enter the model you want to search"
+      ></a-input>
+    </a-modal>
+    <div class="modelTableBox mx-auto">
+      <div
+        class="modelCardBox mx-auto d-flex justify-content-center align-items-center flex-wrap"
+      >
+        <ModelCard
+          v-for="item in models"
+          :key="item.id"
+          :ModelProps="item"
+        ></ModelCard>
+      </div>
+      <div class="page mx-5 mt-3">
+        <a-pagination
+          @change="changePageSize"
+          v-model:current="current"
+          :pageSize="12"
+          :total="total"
+          simple
+        />
+      </div>
+    </div>
+  </div>
+</template>
+<script lang="ts">
+import router from "@/router";
+import store from "@/store";
+import { ModelProps } from "@/store/model";
+import { defineComponent, onMounted, ref } from "vue";
+import ModelCard from "./ModelCard.vue";
+export default defineComponent({
+  name: "Model",
+  components: {
+    ModelCard,
+  },
+
+  setup() {
+    const models = ref<ModelProps[]>([]);
+    const total = ref<number>(0);
+    const current = ref<number>(1);
+    const visible = ref<boolean>(false);
+    const keyword = ref<string>("");
+    const findModelsTotal = async () => {
+      await store.dispatch("model/findTotal");
+      await store.dispatch("model/findModels", {
+        count: current.value,
+        pageSize: 12,
+        keyword: "",
+      });
+      models.value = store.state.model.models;
+      total.value = store.state.model.total;
+    };
+    const findTotal = async (keyword?: string) => {
+      await store.dispatch("model/findTotalSearch", {
+        keyword,
+      });
+      total.value = store.state.model.total;
+    };
+    const findModels = async (keyword?: string, page?: number) => {
+      await store.dispatch("model/findModels", {
+        count: page ? page : current.value,
+        pageSize: 12,
+        keyword,
+      });
+      models.value = store.state.model.models;
+      visible.value = false;
+    };
+    const handleCancel = () => {
+      visible.value = false;
+      keyword.value = "";
+    };
+    const changePageSize = async (page: number) => {
+      if (keyword.value == "") {
+        await store.dispatch("model/findModels", {
+          count: page,
+          pageSize: 12,
+          keyword: "",
+        });
+        models.value = store.state.model.models;
+      } else {
+        findModels(keyword.value, page);
+      }
+    };
+    const onSearch = (e: KeyboardEvent) => {
+      if (e.key == "Enter") {
+        current.value = 1;
+        findModels(keyword.value);
+        findTotal(keyword.value);
+      }
+    };
+    document.onkeydown = (e: KeyboardEvent) => {
+      if (("f" == e.key && e.ctrlKey) || (e.ctrlKey && e.key === "F")) {
+        if (visible.value == false) {
+          visible.value = true;
+        } else {
+          visible.value = false;
+        }
+      }
+      if ((e.ctrlKey && e.key === "f") || (e.ctrlKey && e.key === "F")) {
+        e.preventDefault();
+      }
+      if ((e.ctrlKey && e.key === "c") || (e.ctrlKey && e.key === "C")) {
+        router.push("/model/edit");
+      }
+    };
+    onMounted(() => {
+      findModelsTotal();
+    });
+    return {
+      models,
+      total,
+      current,
+      changePageSize,
+      visible,
+      handleCancel,
+      onSearch,
+      keyword,
+    };
+  },
+});
+</script>
+<style lang="scss">
+.searchModel {
+  .ant-modal-content {
+    border-radius: 0.75rem !important;
+  }
+}
+.ant-layout-content {
+  position: relative;
+  .modelTableBox {
+    .page {
+      .ant-pagination-item-link {
+        width: 3rem;
+        height: 3rem;
+        svg {
+          margin-top: -0.5rem;
+          width: 3rem;
+          height: 3rem;
+        }
+      }
+      .ant-pagination-prev {
+        position: absolute;
+        left: 1rem;
+        top: 47.5%;
+      }
+      .ant-pagination-next {
+        position: absolute;
+        right: 1rem;
+        top: 47.5%;
+      }
+      .ant-pagination-simple-pager {
+        display: none;
+      }
+    }
+  }
+}
+</style>

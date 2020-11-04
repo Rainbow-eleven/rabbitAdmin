@@ -30,10 +30,12 @@ export interface GlobalLoginStore {
   email: string;
   routerNum: number;
   accountInfo: UserInfo;
+  uploadUrl: string;
 }
 const ModuleLogin: Module<GlobalLoginStore, GlobalStore> = {
   state: {
     isSend: false,
+    uploadUrl: "http://127.0.0.1:3000/upload",
     accountInfo: {},
     routerNum: 0,
     user: { isLogin: false },

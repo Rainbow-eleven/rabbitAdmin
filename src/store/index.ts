@@ -1,3 +1,4 @@
+import { ModuleModel, GlobalModelStore } from "./model";
 import { ModuleBrand, GlobalBrandStore, BrandProp } from "./brand";
 import { ModuleClassify, GlobalClassifyProp, ClassifyProp } from "./classify";
 import { Commit, createStore } from "vuex";
@@ -22,6 +23,7 @@ export interface GlobalStore {
   dashBoard: GlobalDashBoardProps;
   ring: GlobalRingStore;
   brand: GlobalBrandStore;
+  model: GlobalModelStore;
 }
 export interface MessageResult {
   statusCode: number;
@@ -41,12 +43,12 @@ export interface ColumnProp {
   align?: string;
 }
 export const mapTime = (item: ClassifyProp | BrandProp) => {
+  const newCTime = new Date(item.createdTime ? item.createdTime : "").getTime();
+  const newUTime = new Date(item.updatedTime ? item.updatedTime : "").getTime();
   return {
     ...item,
-    createdTime:
-      item.createdTime?.slice(0, 10) + " " + item.createdTime?.slice(11, 16),
-    updatedTime:
-      item.updatedTime?.slice(0, 10) + " " + item.updatedTime?.slice(11, 16),
+    createdTime: new Date(newCTime).toLocaleString().toString(),
+    updatedTime: new Date(newUTime).toLocaleString().toString(),
   };
 };
 export const asyncAndCommit = async (
@@ -136,5 +138,6 @@ export default createStore<GlobalStore>({
     dashBoard: ModuleDashBoard,
     ring: ModuleRing,
     brand: ModuleBrand,
+    model: ModuleModel,
   },
 });

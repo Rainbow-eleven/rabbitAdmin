@@ -138,14 +138,17 @@ export const ModuleClassify: Module<GlobalClassifyProp, GlobalStore> = {
       });
     },
     findClassify(state, res) {
-      state.classify = res.data;
       state.classifyUpdate = res.data;
+      delete state.classifyUpdate.updatedTime;
+      delete state.classifyUpdate.createdTime;
     },
     changeUploadIcon(state, response) {
       state.classify.icon = response.src;
+      state.classifyUpdate.icon = response.src;
     },
     changeUploadBigIcon(state, response) {
       state.classify.bigIcon = response.src;
+      state.classifyUpdate.bigIcon = response.src;
     },
     createClassify(state, res) {
       if (res.statusCode == 200) {
