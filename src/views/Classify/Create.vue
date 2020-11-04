@@ -205,6 +205,11 @@ export default defineComponent({
     onUnmounted(() => {
       store.commit("classify/clearClassify");
     });
+    document.onkeydown = (e: KeyboardEvent) => {
+      if (e.key == "Escape") {
+        backToGo();
+      }
+    };
     const onCancel = () => {
       resetFields();
     };

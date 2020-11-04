@@ -27,6 +27,10 @@ import {
   Avatar,
   Select,
   Pagination,
+  Slider,
+  InputNumber,
+  Row,
+  Col,
 } from "ant-design-vue";
 
 createApp(App)
@@ -36,11 +40,15 @@ createApp(App)
   .use(Upload)
   .use(Table)
   .use(Tag)
+  .use(Slider)
   .use(AutoComplete)
   .use(Switch)
   .use(Carousel)
   .use(Card)
+  .use(InputNumber)
   .use(Select)
+  .use(Row)
+  .use(Col)
   .use(PageHeader)
   .use(Pagination)
   .use(Avatar)

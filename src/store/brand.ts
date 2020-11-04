@@ -85,7 +85,7 @@ export const ModuleBrand: Module<GlobalBrandStore, GlobalStore> = {
       logo: "",
       brandName: "",
       description: "",
-      classifyId: "",
+      classifyId: undefined,
     },
     data: [],
     pagination: {

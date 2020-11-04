@@ -55,9 +55,7 @@
       <a-layout-content
         :style="{
           margin: '1rem 1rem',
-          padding: '1rem',
           background: '#fff',
-          height: '100vh',
         }"
       >
         <router-view v-slot="{ Component }">

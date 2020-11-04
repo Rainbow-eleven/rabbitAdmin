@@ -204,6 +204,11 @@ export default defineComponent({
     const changeClassify = (e: number) => {
       brand.value.classifyId = e;
     };
+    document.onkeydown = (e: KeyboardEvent) => {
+      if (e.key == "Escape") {
+        backToGo();
+      }
+    };
     onUnmounted(() => {
       store.commit("brand/clearBrand");
       store.commit("classify/clearClassify");

@@ -9,14 +9,17 @@
       @ok="onSearch"
       keyboard
       @cancel="handleCancel"
+      :maskClosable="false"
     >
       <a-input
         @keydown="onSearch"
         v-model:value="keyword"
+        allow-clear
+        autofocus
         placeholder="Please enter the model you want to search"
       ></a-input>
     </a-modal>
-    <div class="modelTableBox mx-auto">
+    <div class="modelTableBox mx-auto" v-if="models.length > 0">
       <div
         class="modelCardBox mx-auto d-flex justify-content-center align-items-center flex-wrap"
       >
@@ -36,6 +39,9 @@
         />
       </div>
     </div>
+    <div v-else>
+      <NoData />
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -44,12 +50,13 @@ import store from "@/store";
 import { ModelProps } from "@/store/model";
 import { defineComponent, onMounted, ref } from "vue";
 import ModelCard from "./ModelCard.vue";
+import NoData from "../NoData.vue";
 export default defineComponent({
   name: "Model",
   components: {
     ModelCard,
+    NoData,
   },
-
   setup() {
     const models = ref<ModelProps[]>([]);
     const total = ref<number>(0);
@@ -144,6 +151,7 @@ export default defineComponent({
 .ant-layout-content {
   position: relative;
   .modelTableBox {
+    background: #fff;
     .page {
       .ant-pagination-item-link {
         width: 3rem;

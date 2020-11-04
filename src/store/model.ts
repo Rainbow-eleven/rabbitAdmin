@@ -22,6 +22,7 @@ export interface ModelProps {
 export interface GlobalModelStore {
   models: [];
   total: number;
+  model: ModelProps;
 }
 export const ModuleModel: Module<GlobalModelStore, GlobalStore> = {
   mutations: {
@@ -34,6 +35,12 @@ export const ModuleModel: Module<GlobalModelStore, GlobalStore> = {
     findTotalSearch(state, res) {
       state.models = res.data;
       state.total = res.total;
+    },
+    changeUploadedFaceImg(state, response) {
+      state.model.faceImg = response.src;
+    },
+    changeUploadedContentImg(state, response) {
+      state.model.contentImg = response.src;
     },
   },
   actions: {
@@ -52,6 +59,14 @@ export const ModuleModel: Module<GlobalModelStore, GlobalStore> = {
     },
   },
   state: {
+    model: {
+      modelName: "",
+      faceImg: "",
+      contentImg: "",
+      brandId: undefined,
+      classifyId: undefined,
+      description: "",
+    },
     models: [],
     total: 0,
   },
