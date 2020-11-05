@@ -43,6 +43,7 @@
           :placeholder="classifyUpdate.classifyName"
           @change="changeClassify"
           class="w-25"
+          @dropdownVisibleChange="handleSelect"
         >
           <a-select-option
             :label="item.classifyName"

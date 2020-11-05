@@ -34,7 +34,6 @@
             <a-input-password
               placeholder="Please enter your new password"
               v-model:value="newPass"
-              @pressEnter="UpdateNewPassword"
             ></a-input-password>
           </a-form-item>
         </a-form>
@@ -58,7 +57,7 @@ export default defineComponent({
     const newPass = ref("");
     const findAccount = async () => {
       if (email.value.length > 0) {
-        const user = await store.dispatch("UserFindAccount", email.value);
+        const user = await store.dispatch("login/UserFindAccount", email.value);
         if (user.statusCode !== 200) {
           isDis.value = true;
         } else {
@@ -80,7 +79,7 @@ export default defineComponent({
               clearInterval(timer);
             }
           }, 1000);
-          await store.dispatch("UserSendEmail", email.value);
+          await store.dispatch("user/UserSendEmail", email.value);
         }
       } else {
         message.info("E-mail can not be empty");
@@ -90,11 +89,10 @@ export default defineComponent({
       store.commit("login/LoginChangeShowModal", false);
       store.commit("login/LoginChangeIsSend", false);
       store.commit("login/LoginChangeRouterNum", 0);
-      // email.value = "";
       emailCode.value = "";
     };
     const UpdateNewPassword = async () => {
-      await store.dispatch("UserUpdatePassword", {
+      await store.dispatch("user/UserUpdatePassword", {
         id: store.state.login.accountInfo.id,
         pass: newPass.value,
       });

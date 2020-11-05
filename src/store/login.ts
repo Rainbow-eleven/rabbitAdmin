@@ -106,7 +106,7 @@ const ModuleLogin: Module<GlobalLoginStore, GlobalStore> = {
     async UserFindAccount({ commit }, account: string) {
       return asyncAndCommit(
         `/user/account/${account}`,
-        "login/UserFindAccount",
+        "UserFindAccount",
         commit
       );
     },

@@ -55,7 +55,7 @@
         </a-button>
       </a-form-item>
     </a-form>
-    <div class="mt-5 d-flex justify-content-center align-items-center">
+    <div class="mt-3 d-flex justify-content-center align-items-center">
       <div>Don't hava an account?</div>
       <a-button type="link"
         ><router-link to="/reg">register now!</router-link></a-button

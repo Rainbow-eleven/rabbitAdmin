@@ -2,21 +2,22 @@
   <div class="modelEditBox mb-3">
     <a-page-header title="Model" sub-title="Information" @back="backToGo" />
     <a-form class="mt-3" :label-col="{ span: 3 }" :wrapperCol="{ span: 14 }">
-      <a-form-item label="modelName">
+      <a-form-item label="modelName" v-bind="validateInfos.modelName">
         <a-input
           placeholder="Please input modelName"
           v-model:value="model.modelName"
         ></a-input>
       </a-form-item>
-      <a-form-item label="description">
+      <a-form-item label="description" v-bind="validateInfos.description">
         <a-textarea
           v-model:value="model.description"
           placeholder="Please input description"
         ></a-textarea>
       </a-form-item>
-      <a-form-item label="classify">
+      <a-form-item label="classify" v-bind="validateInfos.classifyId">
         <a-select
-          placeholder="Please Change classify"
+          v-if="!id"
+          placeholder="Please input classify"
           v-model:value="model.classifyId"
           @dropdownVisibleChange="handleSelectClassify"
         >
@@ -29,10 +30,26 @@
             {{ item.classifyName }}
           </a-select-option>
         </a-select>
-      </a-form-item>
-      <a-form-item label="brandId">
         <a-select
-          placeholder="Please Change brand"
+          v-else
+          :placeholder="classifyUpdate.classifyName"
+          @change="changeClassifyId"
+          @dropdownVisibleChange="handleSelectClassify"
+        >
+          <a-select-option
+            :value="item.id"
+            :label="item.classifyName"
+            v-for="item in classifyOption"
+            :key="item.id"
+          >
+            {{ item.classifyName }}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="brand" v-bind="validateInfos.brandId">
+        <a-select
+          v-if="!id"
+          placeholder="Please input brand"
           v-model:value="model.brandId"
           @dropdownVisibleChange="handleSelectBrand"
         >
@@ -45,8 +62,23 @@
             {{ item.brandName }}
           </a-select-option>
         </a-select>
+        <a-select
+          v-else
+          :placeholder="brandUpdate.brandName"
+          @change="changeBrandId"
+          @dropdownVisibleChange="handleSelectBrand"
+        >
+          <a-select-option
+            :value="item.id"
+            :label="item.brandName"
+            v-for="item in brandOption"
+            :key="item.id"
+          >
+            {{ item.brandName }}
+          </a-select-option>
+        </a-select>
       </a-form-item>
-      <a-form-item label="exchangePrice">
+      <a-form-item label="exchangePrice" v-bind="validateInfos.exchangePrice">
         <a-row>
           <a-col :span="20">
             <a-slider
@@ -57,32 +89,32 @@
           </a-col>
           <a-col :span="4">
             <a-input-number
-              placeholder="￥"
               v-model:value="model.exchangePrice"
               :min="1"
               :max="50000"
               style="marginLeft: 1rem"
+              @blur="changeNum"
             />
           </a-col>
         </a-row>
       </a-form-item>
-      <a-form-item label="topPrice">
+      <a-form-item label="topPrice" v-bind="validateInfos.topPrice">
         <a-row>
           <a-col :span="20">
             <a-slider v-model:value="model.topPrice" :min="1" :max="50000" />
           </a-col>
           <a-col :span="4">
             <a-input-number
-              placeholder="￥"
               v-model:value="model.topPrice"
               :min="1"
               :max="50000"
               style="marginLeft: 1rem"
+              @blur="changeNum"
             />
           </a-col>
         </a-row>
       </a-form-item>
-      <a-form-item label="faceImg">
+      <a-form-item label="faceImg" v-bind="validateInfos.faceImg">
         <a-upload
           name="file"
           list-type="picture-card"
@@ -102,7 +134,7 @@
           </div>
         </a-upload>
       </a-form-item>
-      <a-form-item label="contentImg">
+      <a-form-item label="contentImg" v-bind="validateInfos.contentImg">
         <a-upload
           name="file"
           list-type="picture-card"
@@ -122,7 +154,7 @@
           </div>
         </a-upload>
       </a-form-item>
-      <a-form-item label="action">
+      <a-form-item label="action" v-if="!id">
         <a-button
           class="w-25 mr-4"
           style="height:3.25rem;"
@@ -133,6 +165,16 @@
         </a-button>
         <a-button class="w-25" style="height:3.25rem;" @click="onCancel">
           Cancel
+        </a-button>
+      </a-form-item>
+      <a-form-item label="action" v-else>
+        <a-button
+          class="w-25 mr-4"
+          style="height:3.25rem;"
+          type="primary"
+          @click="onUpdate"
+        >
+          Update
         </a-button>
       </a-form-item>
     </a-form>
@@ -146,14 +188,25 @@ import { ClassifyProp } from "@/store/classify";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { UploadChangeParam, UploadFile } from "ant-design-vue/types/upload";
-import { computed, defineComponent, ref } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+} from "vue";
+import { useForm } from "@ant-design-vue/use";
 export default defineComponent({
   name: "ModelEdit",
   components: {
     LoadingOutlined,
     PlusOutlined,
   },
-  setup() {
+  props: {
+    id: Number,
+  },
+  setup(props) {
     const backToGo = () => {
       router.go(-1);
     };
@@ -164,6 +217,15 @@ export default defineComponent({
     const numBrand = ref<number>(0);
     const classifyOption = ref<ClassifyProp[]>([]);
     const brandOption = ref<BrandProp[]>([]);
+    const classifyUpdate = ref<ClassifyProp>({});
+    const brandUpdate = ref<BrandProp>({});
+    const { resetFields, validate, validateInfos } = useForm(
+      reactive(store.state.model.model),
+      reactive(store.state.model.rules)
+    );
+    const onCancel = () => {
+      resetFields();
+    };
     const beforeUpload = (file: File) => {
       const isJpgOrPng =
         file.type === "image/jpeg" || file.type === "image/png";
@@ -202,13 +264,71 @@ export default defineComponent({
     };
     const onSubmit = (e: Event) => {
       e.preventDefault();
-      console.log(model.value);
+      validate()
+        .then(async () => {
+          await store.dispatch("model/createModel", {
+            ...model.value,
+            createdUserId: store.state.login.user.id,
+          });
+          store.commit("model/clearModel");
+          router.push("/model");
+        })
+        .catch(() => {
+          message.error("Please check the data you want to pass");
+        });
+    };
+    const changeNum = () => {
+      if (model.value.topPrice == null) {
+        model.value.topPrice = 0;
+      }
+      if (model.value.exchangePrice == null) {
+        model.value.exchangePrice = 0;
+      }
     };
     document.onkeydown = (e: KeyboardEvent) => {
       if (e.key == "Escape") {
         backToGo();
       }
     };
+    const findModel = async () => {
+      await store.dispatch("model/findModel", props.id);
+    };
+    const onUpdate = async () => {
+      if (
+        model.value.modelName == "" ||
+        model.value.description == "" ||
+        model.value.classifyId == "" ||
+        model.value.brandId == ""
+      ) {
+        message.info("Input box cannot be empty");
+      } else {
+        await store.dispatch("model/updateModel", {
+          id: props.id,
+          data: model.value,
+        });
+        router.push("/model");
+      }
+    };
+    const findClassify = async () => {
+      await store.dispatch("classify/findClassify", model.value.classifyId);
+      classifyUpdate.value = store.state.classify.classifyUpdate;
+    };
+    const findBrand = async () => {
+      await store.dispatch("brand/findBrand", model.value.brandId);
+      brandUpdate.value = store.state.brand.brand;
+    };
+    onMounted(async () => {
+      if (props.id) {
+        await findModel();
+        await findBrand();
+        await findClassify();
+      }
+    });
+    onUnmounted(() => {
+      store.commit("model/clearModel");
+      store.commit("classify/clearClassify");
+      store.commit("brand/clearBrand");
+    });
     return {
       backToGo,
       model,
@@ -222,6 +342,12 @@ export default defineComponent({
       brandOption,
       classifyOption,
       onSubmit,
+      onCancel,
+      validateInfos,
+      classifyUpdate,
+      brandUpdate,
+      changeNum,
+      onUpdate,
     };
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ModelListBox">
     <a-modal
       title="Search"
       v-model:visible="visible"
@@ -23,11 +23,15 @@
       <div
         class="modelCardBox mx-auto d-flex justify-content-center align-items-center flex-wrap"
       >
-        <ModelCard
-          v-for="item in models"
-          :key="item.id"
-          :ModelProps="item"
-        ></ModelCard>
+        <ModelCard v-for="item in models" :key="item.id" :ModelProps="item">
+          <template #delete="text">
+            <DeleteOutlined
+              :class="{ deleteColor: item.status == 0 }"
+              key="setting"
+              @click="deleteModel(text)"
+            />
+          </template>
+        </ModelCard>
       </div>
       <div class="page mx-5 mt-3">
         <a-pagination
@@ -47,15 +51,17 @@
 <script lang="ts">
 import router from "@/router";
 import store from "@/store";
-import { ModelProps } from "@/store/model";
+import { DeleteModelProps, ModelProps } from "@/store/model";
 import { defineComponent, onMounted, ref } from "vue";
 import ModelCard from "./ModelCard.vue";
 import NoData from "../NoData.vue";
+import { DeleteOutlined } from "@ant-design/icons-vue";
 export default defineComponent({
   name: "Model",
   components: {
     ModelCard,
     NoData,
+    DeleteOutlined,
   },
   setup() {
     const models = ref<ModelProps[]>([]);
@@ -111,6 +117,24 @@ export default defineComponent({
         findTotal(keyword.value);
       }
     };
+    const deleteModel = async (context: DeleteModelProps) => {
+      if (context.model?.status == 1) {
+        context.model.status = 0;
+      } else {
+        context.model.status = 1;
+      }
+      store.commit("model/toggleStatus", context.model.status);
+      await store.dispatch("model/updateModel", {
+        id: context.model?.id,
+        data: {
+          ...context.model,
+          status: context.model.status,
+          classifyId: context.classify?.id,
+          brandId: context.brand?.id,
+        },
+      });
+      await findModelsTotal();
+    };
     document.onkeydown = (e: KeyboardEvent) => {
       if (("f" == e.key && e.ctrlKey) || (e.ctrlKey && e.key === "F")) {
         if (visible.value == false) {
@@ -138,15 +162,22 @@ export default defineComponent({
       handleCancel,
       onSearch,
       keyword,
+      deleteModel,
     };
   },
 });
 </script>
 <style lang="scss">
+.deleteColor {
+  color: #ff4d4f !important;
+}
 .searchModel {
   .ant-modal-content {
     border-radius: 0.75rem !important;
   }
+}
+.ModelListBox {
+  background: #fff;
 }
 .ant-layout-content {
   position: relative;

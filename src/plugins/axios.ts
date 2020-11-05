@@ -39,6 +39,7 @@ axios.interceptors.response.use(
       };
       message.info(data.message);
       localStorage.clear();
+      location.href = "/";
       return Promise.reject(data);
     }
     if (error.response.status === 500) {
