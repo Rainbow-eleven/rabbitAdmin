@@ -13,6 +13,7 @@ import { GlobalWelStore, ModuleWelcome } from "./welcome";
 import { ModuleDashBoard, GlobalDashBoardProps } from "./dashBoard";
 import { GlobalRingStore, ModuleRing } from "./ring";
 import { GlobalMalfunction, ModuleMalfunction } from "./malfunction";
+import { GlobalMalo, ModuleMalo } from "./malo";
 
 export interface GlobalStore {
   login: GlobalLoginStore;
@@ -26,6 +27,7 @@ export interface GlobalStore {
   brand: GlobalBrandStore;
   model: GlobalModelStore;
   malfunction: GlobalMalfunction;
+  malo: GlobalMalo;
 }
 export interface MessageResult {
   statusCode: number;
@@ -143,5 +145,6 @@ export default createStore<GlobalStore>({
     brand: ModuleBrand,
     model: ModuleModel,
     malfunction: ModuleMalfunction,
+    malo: ModuleMalo,
   },
 });

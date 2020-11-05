@@ -12,7 +12,19 @@
         :classify="classify"
         :brand="brand"
       ></slot>
-      <ellipsis-outlined key="ellipsis" @click="goToMalfunctionCreate" />
+      <a-popover
+        v-model:visible="visible"
+        title="Select configuration"
+        trigger="click"
+      >
+        <template #content>
+          <a-button class="my-2 w-100" @click="goToMalfunctionCreate"
+            >Malfunction</a-button
+          ><br />
+          <a-button class="my-2 w-100" @click="goToMaloCreate">Malo</a-button>
+        </template>
+        <ellipsis-outlined key="ellipsis" />
+      </a-popover>
     </template>
     <a-card-meta
       :title="model.modelName"
@@ -43,19 +55,25 @@ export default defineComponent({
     const brand = ref(model.value?.brandId);
     const classify = ref(model.value?.classifyId);
     const status = ref(model.value?.status);
+    const visible = ref<boolean>(false);
     const editModel = () => {
       router.push(`/model/edit/${props.ModelProps?.id}`);
     };
     const goToMalfunctionCreate = () => {
       router.push(`/malfunction/edit/${model.value?.id}`);
     };
+    const goToMaloCreate = () => {
+      router.push(`/malo/edit/${model.value?.id}`);
+    };
     return {
       model,
       brand,
       status,
       classify,
+      visible,
       editModel,
       goToMalfunctionCreate,
+      goToMaloCreate,
     };
   },
 });

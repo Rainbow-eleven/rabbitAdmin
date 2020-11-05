@@ -94,6 +94,12 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
         component: () => import("../views/Malfunction/MalfunctionEdit.vue"),
       },
+      {
+        path: "/malo/edit/:modelId",
+        name: "MaloCreate",
+        props: true,
+        component: () => import("../views/Malo/MaloEdit.vue"),
+      },
     ],
   },
   {

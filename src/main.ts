@@ -31,6 +31,7 @@ import {
   InputNumber,
   Row,
   Col,
+  Popover,
 } from "ant-design-vue";
 
 createApp(App)
@@ -49,6 +50,7 @@ createApp(App)
   .use(Select)
   .use(Row)
   .use(Col)
+  .use(Popover)
   .use(PageHeader)
   .use(Pagination)
   .use(Avatar)

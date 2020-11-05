@@ -6,6 +6,14 @@
       :pagination="pagination"
       bordered
     >
+      <template #title>
+        <a-input
+          placeholder="Please enter what you want"
+          v-model:value="searchKeyword"
+          @pressEnter="searchData"
+          @input="searchData"
+        ></a-input>
+      </template>
       <template #modelId="{text}">
         <a-tooltip>
           <template #title>
@@ -14,7 +22,7 @@
           <span>{{ text.modelName }}</span>
         </a-tooltip>
       </template>
-      <template #title="{text}">
+      <template #titleName="{text}">
         <a-tooltip>
           <template #title>
             {{ text }}
@@ -59,6 +67,7 @@ export default defineComponent({
     const columns = computed(() => store.state.malfunction.columns);
     const pagination = computed(() => store.state.malfunction.pagination);
     const model = ref();
+    const searchKeyword = ref<string>("");
     const findMalfunctions = async () => {
       await store.dispatch("malfunction/findMalfunctions");
       malfunctions.value = store.state.malfunction.malfunctions;
@@ -79,6 +88,19 @@ export default defineComponent({
       });
       findMalfunctions();
     };
+    const searchData = () => {
+      if (searchKeyword.value.length > 0) {
+        malfunctions.value = malfunctions.value.filter((item) => {
+          return (
+            item.modelId?.modelName
+              ?.toLocaleLowerCase()
+              .indexOf(searchKeyword.value.toLocaleLowerCase()) !== -1
+          );
+        });
+      } else {
+        findMalfunctions();
+      }
+    };
     onMounted(() => {
       findMalfunctions();
     });
@@ -88,6 +110,8 @@ export default defineComponent({
       pagination,
       goToMal,
       toggleIsHint,
+      searchKeyword,
+      searchData,
     };
   },
 });

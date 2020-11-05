@@ -5,8 +5,8 @@ import { GlobalStore, StatusType } from ".";
 import { PaginationProp } from "./user";
 import { ModelProps } from "./model";
 export interface MalfunctionProp {
-  id?: number;
-  modelId?: number | ModelProps;
+  id?: string;
+  modelId?: ModelProps;
   title?: string;
   isHint?: StatusType;
   hintTitle?: string;
@@ -26,7 +26,7 @@ export const ModuleMalfunction: Module<GlobalMalfunction, GlobalStore> = {
     changeUploadedFaceImg(state, response) {
       state.malfunction.hintImg = response.src;
     },
-    changeModelId(state, id: number) {
+    changeModelId(state, id) {
       state.malfunction.modelId = id;
     },
     createMalfunction(state, res) {
@@ -93,7 +93,7 @@ export const ModuleMalfunction: Module<GlobalMalfunction, GlobalStore> = {
   },
   state: {
     pagination: {
-      pageSize: 6,
+      pageSize: 8,
       total: 0,
       hideOnSinglePage: true,
       simple: true,
@@ -108,12 +108,12 @@ export const ModuleMalfunction: Module<GlobalMalfunction, GlobalStore> = {
         slots: { customRender: "modelId" },
       },
       {
-        title: "title",
+        title: "titleName",
         align: "center",
         dataIndex: "title",
         ellipsis: true,
         width: "10%",
-        slots: { customRender: "title" },
+        slots: { customRender: "titleName" },
       },
       {
         title: "hintTitle",
