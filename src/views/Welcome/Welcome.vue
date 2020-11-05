@@ -63,7 +63,7 @@ export default defineComponent({
     flex: 2;
   }
   .right {
-    padding: 3rem;
+    padding: 2rem;
     background-color: #f6f5fb;
     border-radius: 0 3rem 0 3rem;
     flex: 1;

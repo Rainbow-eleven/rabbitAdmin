@@ -12,6 +12,7 @@
         :classify="classify"
         :brand="brand"
       ></slot>
+      <ellipsis-outlined key="ellipsis" @click="goToMalfunctionCreate" />
     </template>
     <a-card-meta
       :title="model.modelName"
@@ -25,7 +26,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
-import { EditOutlined } from "@ant-design/icons-vue";
+import { EditOutlined, EllipsisOutlined } from "@ant-design/icons-vue";
 import { ModelProps } from "@/store/model";
 import router from "@/router";
 export default defineComponent({
@@ -35,6 +36,7 @@ export default defineComponent({
   },
   components: {
     EditOutlined,
+    EllipsisOutlined,
   },
   setup(props) {
     const model = ref(props.ModelProps);
@@ -44,12 +46,16 @@ export default defineComponent({
     const editModel = () => {
       router.push(`/model/edit/${props.ModelProps?.id}`);
     };
+    const goToMalfunctionCreate = () => {
+      router.push(`/malfunction/edit/${model.value?.id}`);
+    };
     return {
       model,
       brand,
       status,
       classify,
       editModel,
+      goToMalfunctionCreate,
     };
   },
 });

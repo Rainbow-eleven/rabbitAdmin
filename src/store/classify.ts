@@ -158,10 +158,10 @@ export const ModuleClassify: Module<GlobalClassifyProp, GlobalStore> = {
       }
     },
     toggleStatus(state, num) {
-      state.classify.status = num;
+      state.classifyUpdate.status = num;
     },
     toggleIsDelete(state, num) {
-      state.classify.isDelete = num;
+      state.classifyUpdate.isDelete = num;
     },
     clearClassify(state) {
       state.classify = {

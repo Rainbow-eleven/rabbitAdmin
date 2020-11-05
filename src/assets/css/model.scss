@@ -1,0 +1,41 @@
+.deleteColor {
+  color: #ff4d4f !important;
+}
+.searchModel {
+  .ant-modal-content {
+    border-radius: 0.75rem !important;
+  }
+}
+.ModelListBox {
+  background: #fff;
+}
+.ant-layout-content {
+  position: relative;
+  .modelTableBox {
+    background: #fff;
+    .page {
+      .ant-pagination-item-link {
+        width: 3rem;
+        height: 3rem;
+        svg {
+          margin-top: -0.5rem;
+          width: 3rem;
+          height: 3rem;
+        }
+      }
+      .ant-pagination-prev {
+        position: absolute;
+        left: 1rem;
+        top: 46.5%;
+      }
+      .ant-pagination-next {
+        position: absolute;
+        right: 1rem;
+        top: 46.5%;
+      }
+      .ant-pagination-simple-pager {
+        display: none;
+      }
+    }
+  }
+}

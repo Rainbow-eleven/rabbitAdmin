@@ -77,6 +77,23 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
         component: () => import("../views/Model/ModelEdit.vue"),
       },
+      {
+        path: "/malfunction",
+        name: "Malfunction",
+        component: () => import("../views/Malfunction/Malfunction.vue"),
+      },
+      {
+        path: "/malfunction/edit/:modelId",
+        name: "MalfunctionCreate",
+        props: true,
+        component: () => import("../views/Malfunction/MalfunctionEdit.vue"),
+      },
+      {
+        path: "/malfunction/edit/:modelId/:id",
+        name: "MalfunctionEdit",
+        props: true,
+        component: () => import("../views/Malfunction/MalfunctionEdit.vue"),
+      },
     ],
   },
   {

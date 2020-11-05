@@ -12,6 +12,7 @@ import ModuleReg, { GlobalRegStore } from "./Reg";
 import { GlobalWelStore, ModuleWelcome } from "./welcome";
 import { ModuleDashBoard, GlobalDashBoardProps } from "./dashBoard";
 import { GlobalRingStore, ModuleRing } from "./ring";
+import { GlobalMalfunction, ModuleMalfunction } from "./malfunction";
 
 export interface GlobalStore {
   login: GlobalLoginStore;
@@ -24,6 +25,7 @@ export interface GlobalStore {
   ring: GlobalRingStore;
   brand: GlobalBrandStore;
   model: GlobalModelStore;
+  malfunction: GlobalMalfunction;
 }
 export interface MessageResult {
   statusCode: number;
@@ -41,6 +43,7 @@ export interface ColumnProp {
   slots?: SlotProp;
   key?: string;
   align?: string;
+  ellipsis?: boolean;
 }
 export const mapTime = (item: ClassifyProp | BrandProp) => {
   const newCTime = new Date(item.createdTime ? item.createdTime : "").getTime();
@@ -139,5 +142,6 @@ export default createStore<GlobalStore>({
     ring: ModuleRing,
     brand: ModuleBrand,
     model: ModuleModel,
+    malfunction: ModuleMalfunction,
   },
 });

@@ -63,7 +63,7 @@ export default defineComponent({
       await store.commit("classify/toggleStatus", context.status == 1 ? 0 : 1);
       await store.dispatch("classify/updateClassify", {
         id: context.id,
-        res: store.state.classify.classify,
+        res: store.state.classify.classifyUpdate,
       });
       findClassifys();
     };
@@ -75,7 +75,7 @@ export default defineComponent({
       );
       await store.dispatch("classify/updateClassify", {
         id: context.id,
-        res: store.state.classify.classify,
+        res: store.state.classify.classifyUpdate,
       });
       findClassifys();
     };
