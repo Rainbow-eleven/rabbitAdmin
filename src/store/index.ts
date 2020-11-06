@@ -14,6 +14,9 @@ import { ModuleDashBoard, GlobalDashBoardProps } from "./dashBoard";
 import { GlobalRingStore, ModuleRing } from "./ring";
 import { GlobalMalfunction, ModuleMalfunction } from "./malfunction";
 import { GlobalMalo, ModuleMalo } from "./malo";
+import ModuleEvaluate, { GlobalEvaluate } from "./evaluate";
+import ModuleEvaluateDetail, { GlobalEvaluateDetail } from "./evaluateDetail";
+import { GlobalAppointment, ModuleAppointment } from "./appointment";
 
 export interface GlobalStore {
   login: GlobalLoginStore;
@@ -28,6 +31,9 @@ export interface GlobalStore {
   model: GlobalModelStore;
   malfunction: GlobalMalfunction;
   malo: GlobalMalo;
+  evaluate: GlobalEvaluate;
+  evaluateDetail: GlobalEvaluateDetail;
+  appo: GlobalAppointment;
 }
 export interface MessageResult {
   statusCode: number;
@@ -146,5 +152,8 @@ export default createStore<GlobalStore>({
     model: ModuleModel,
     malfunction: ModuleMalfunction,
     malo: ModuleMalo,
+    evaluate: ModuleEvaluate,
+    evaluateDetail: ModuleEvaluateDetail,
+    appo: ModuleAppointment,
   },
 });

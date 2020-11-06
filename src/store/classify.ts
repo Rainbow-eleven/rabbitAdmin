@@ -68,7 +68,7 @@ export const ModuleClassify: Module<GlobalClassifyProp, GlobalStore> = {
       pageSize: 6,
       total: 0,
       hideOnSinglePage: true,
-      simple: true,
+      simple: false,
     },
     dataSource: [],
     columns: [

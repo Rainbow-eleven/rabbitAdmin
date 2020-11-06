@@ -1,21 +1,26 @@
 import { message } from "ant-design-vue";
-import { asyncAndCommit } from "./index";
+import { asyncAndCommit, ColumnProp } from "./index";
 import { Module } from "vuex";
-import { GlobalStore, StatusType } from ".";
+import { GlobalStore } from ".";
 import { MalfunctionProp } from "./malfunction";
 import { ModelProps } from "./model";
-interface MaloProps {
+import { PaginationProp } from "./user";
+export interface MaloProps {
   id?: string;
   modelId?: ModelProps;
-  malfunctionId?: number | MalfunctionProp;
+  malfunctionId?: MalfunctionProp;
   optionName?: string;
-  processType?: StatusType;
+  processType?: 1 | 2;
   ratio?: number;
+  key?: number;
 }
 export interface GlobalMalo {
   malo: MaloProps;
   malfunctionOptions: [];
   vRules: {};
+  columns: ColumnProp[];
+  malos: MaloProps[];
+  pagination: PaginationProp;
 }
 export const ModuleMalo: Module<GlobalMalo, GlobalStore> = {
   mutations: {
@@ -49,6 +54,15 @@ export const ModuleMalo: Module<GlobalMalo, GlobalStore> = {
         ratio: 1,
       };
     },
+    findMalos(state, res) {
+      state.malos = res.data;
+      state.malos.map((item: MaloProps, index: number) => {
+        return Object.assign(item, { key: index });
+      });
+    },
+    findMalo(state, res) {
+      state.malo = res.data;
+    },
   },
   actions: {
     findModelMalfunctions({ commit }, id) {
@@ -58,15 +72,79 @@ export const ModuleMalo: Module<GlobalMalo, GlobalStore> = {
         commit
       );
     },
+    findMalos({ commit }) {
+      return asyncAndCommit(`/malo`, "findMalos", commit);
+    },
+    findMalo({ commit }, id) {
+      return asyncAndCommit(`/malo/${id}`, "findMalo", commit);
+    },
     createMalo({ commit }, data) {
       return asyncAndCommit(`/malo`, "createMalo", commit, {
         data,
         method: "post",
       });
     },
+    updateMalo({ commit }, res) {
+      return asyncAndCommit(`/malo/${res.id}`, "updateMalo", commit, {
+        data: res.data,
+        method: "put",
+      });
+    },
   },
   state: {
+    pagination: {
+      pageSize: 8,
+    },
     malfunctionOptions: [],
+    malos: [],
+    columns: [
+      {
+        title: "optionName",
+        align: "center",
+        dataIndex: "optionName",
+        ellipsis: true,
+        width: "20%",
+        slots: { customRender: "optionName" },
+      },
+      {
+        title: "model",
+        align: "center",
+        dataIndex: "modelId",
+        ellipsis: true,
+        width: "15%",
+        slots: { customRender: "modelId" },
+      },
+      {
+        title: "malfunction",
+        align: "center",
+        dataIndex: "malfunctionId",
+        ellipsis: true,
+        width: "15%",
+        slots: { customRender: "malfunctionId" },
+      },
+      {
+        title: "processType",
+        align: "center",
+        dataIndex: "",
+        width: "15%",
+        slots: { customRender: "processType" },
+      },
+      {
+        title: "ratio",
+        align: "center",
+        dataIndex: "ratio",
+        ellipsis: true,
+        width: "10%",
+        slots: { customRender: "ratio" },
+      },
+      {
+        title: "action",
+        align: "center",
+        dataIndex: "",
+        ellipsis: true,
+        slots: { customRender: "action" },
+      },
+    ],
     malo: {
       optionName: "",
       malfunctionId: undefined,

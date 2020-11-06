@@ -93,10 +93,8 @@ export const ModuleMalfunction: Module<GlobalMalfunction, GlobalStore> = {
   },
   state: {
     pagination: {
-      pageSize: 8,
-      total: 0,
-      hideOnSinglePage: true,
-      simple: true,
+      pageSize: 5,
+      hideOnSinglePage: false,
     },
     columns: [
       {

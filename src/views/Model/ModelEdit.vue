@@ -290,6 +290,12 @@ export default defineComponent({
         backToGo();
       }
     };
+    const changeBrandId = (e: BrandProp) => {
+      model.value.brandId = e;
+    };
+    const changeClassifyId = (e: ClassifyProp) => {
+      model.value.classifyId = e;
+    };
     const findModel = async () => {
       await store.dispatch("model/findModel", props.id);
     };
@@ -348,6 +354,8 @@ export default defineComponent({
       brandUpdate,
       changeNum,
       onUpdate,
+      changeBrandId,
+      changeClassifyId,
     };
   },
 });

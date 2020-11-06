@@ -2,16 +2,28 @@ import { Module } from "vuex";
 import { GlobalStore } from ".";
 import { asyncAndCommit } from "./index";
 
-interface DataProps {
+export interface DataProps {
   name?: string;
   value?: string | number;
   itemStyle?: {};
 }
-interface SeriesProps {
-  radius?: string[];
+export interface SeriesProps {
+  radius?: string[] | string;
+  startAngle?: number;
+  endAngle?: number;
   center?: string[];
+  min?: number;
+  max?: number;
   hoverAnimation?: boolean;
+  axisLine?: {};
+  title?: {};
+  splitLine?: {};
+  axisLabel?: {};
   type?: string;
+  pointer?: {
+    length: string;
+  };
+  axisTick?: {};
   label?: {};
   labelLine?: {};
   emphasis?: {};
@@ -20,19 +32,23 @@ interface SeriesProps {
   itemStyle?: {};
   animation?: boolean;
 }
-interface LegendProps {
-  orient: string;
-  left: number;
-  data: string[];
+export interface LegendProps {
+  orient?: string;
+  left?: number;
+  data?: string[];
 }
-interface RingEchartsProps {
-  color: string[];
-  tooltip: {};
-  legend: LegendProps;
+export interface TooltipProp {
+  formatter?: string;
+  trigger?: string;
+}
+export interface EchartsProps {
+  color?: string[];
+  tooltip: TooltipProp;
+  legend?: LegendProps;
   series: SeriesProps[];
 }
 export interface GlobalRingStore {
-  option: RingEchartsProps;
+  option: EchartsProps;
   total: number;
   resValues: number[];
 }
@@ -49,7 +65,6 @@ export const ModuleRing: Module<GlobalRingStore, GlobalStore> = {
         item.value = resValues[index];
         item.name = resKeys[index];
       });
-      state.option.legend.data = resKeys;
     },
   },
   actions: {

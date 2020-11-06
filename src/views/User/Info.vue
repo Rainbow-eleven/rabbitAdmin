@@ -52,6 +52,9 @@
         </div>
       </a-form>
     </div>
+    <div class="appoBox">
+      <Appo :id="id"></Appo>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -61,6 +64,7 @@ import { PlusOutlined, LoadingOutlined } from "@ant-design/icons-vue";
 import { message, Modal } from "ant-design-vue";
 import { UploadChangeParam, UploadFile } from "ant-design-vue/types/upload";
 import EditModel from "./EditModel.vue";
+import Appo from "../../components/Appo.vue";
 import router from "@/router";
 export default defineComponent({
   name: "UserInfo",
@@ -68,6 +72,7 @@ export default defineComponent({
     LoadingOutlined,
     PlusOutlined,
     EditModel,
+    Appo,
   },
   props: {
     id: {

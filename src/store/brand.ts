@@ -92,7 +92,7 @@ export const ModuleBrand: Module<GlobalBrandStore, GlobalStore> = {
       pageSize: 6,
       total: 0,
       hideOnSinglePage: true,
-      simple: true,
+      simple: false,
     },
     rules: {
       brandName: [

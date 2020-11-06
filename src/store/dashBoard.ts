@@ -1,9 +1,9 @@
+import { EchartsProps } from "./ring";
 import { asyncAndCommit } from "./index";
 import { GlobalStore } from ".";
-import { EChartOption } from "echarts";
 import { Module } from "vuex";
 export interface GlobalDashBoardProps {
-  option: EChartOption;
+  option: EchartsProps;
 }
 export const ModuleDashBoard: Module<GlobalDashBoardProps, GlobalStore> = {
   mutations: {

@@ -21,6 +21,22 @@
           class="w-25"
           v-model:value="malo.malfunctionId"
           @dropdownVisibleChange="handleSelect"
+          v-if="!id"
+        >
+          <a-select-option
+            :label="item.title"
+            :value="item.id"
+            v-for="item in malfunctionOptions"
+            :key="item.id"
+          >
+            {{ item.title }}
+          </a-select-option>
+        </a-select>
+        <a-select
+          v-else
+          :placeholder="malfunction.title"
+          @change="changeMalfunction"
+          @dropdownVisibleChange="handleSelect"
         >
           <a-select-option
             :label="item.title"
@@ -78,6 +94,9 @@ export default defineComponent({
   name: "MaloEdit",
   props: {
     modelId: Number,
+    id: {
+      type: Number,
+    },
   },
   setup(props) {
     const { resetFields, validate, validateInfos } = useForm(
@@ -87,6 +106,7 @@ export default defineComponent({
     const num = ref(0);
     const malo = computed(() => store.state.malo.malo);
     const model = ref<ModelProps>({});
+    const malfunction = ref<MalfunctionProp>({});
     const malfunctionOptions = ref<MalfunctionProp[]>([]);
     const onCancel = () => {
       resetFields();
@@ -104,6 +124,21 @@ export default defineComponent({
         malfunctionOptions.value = store.state.malo.malfunctionOptions;
       }
     };
+    const changeMalfunction = (e: MalfunctionProp) => {
+      malo.value.malfunctionId = e;
+    };
+    const onUpdate = async (e: Event) => {
+      e.preventDefault();
+      if (malo.value.optionName == "") {
+        message.info("Input box cannot be empty");
+      } else {
+        await store.dispatch("malo/updateMalo", {
+          id: props.id,
+          data: malo.value,
+        });
+        router.push("/malo");
+      }
+    };
     const onSubmit = () => {
       validate()
         .then(async () => {
@@ -118,7 +153,21 @@ export default defineComponent({
     const changeMalfId = (e: number) => {
       store.commit("malo/changeMalfId", e);
     };
+    const findMalo = async () => {
+      await store.dispatch("malo/findMalo", props.id);
+    };
+    const findMalfunction = async () => {
+      await store.dispatch(
+        "malfunction/findMalfunction",
+        malo.value.malfunctionId
+      );
+      malfunction.value = store.state.malfunction.malfunction;
+    };
     onMounted(async () => {
+      if (props.id) {
+        await findMalo();
+        await findMalfunction();
+      }
       if (props.modelId) {
         store.commit("malo/changeModelId", props.modelId);
         await store.dispatch("model/findModel", props.modelId);
@@ -136,6 +185,9 @@ export default defineComponent({
       validateInfos,
       onSubmit,
       changeMalfId,
+      malfunction,
+      changeMalfunction,
+      onUpdate,
     };
   },
 });

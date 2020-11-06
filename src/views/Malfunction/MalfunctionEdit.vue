@@ -138,10 +138,10 @@ export default defineComponent({
       e.preventDefault();
       validate()
         .then(async () => {
-          await store.dispatch(
-            "malfunction/createMalfunction",
-            malfunction.value
-          );
+          await store.dispatch("malfunction/createMalfunction", {
+            ...malfunction.value,
+            isHint: 0,
+          });
           router.push("/model");
         })
         .catch(() => {

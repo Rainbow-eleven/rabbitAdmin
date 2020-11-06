@@ -95,10 +95,26 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("../views/Malfunction/MalfunctionEdit.vue"),
       },
       {
+        path: "/malo",
+        name: "Malo",
+        component: () => import("../views/Malo/Malo.vue"),
+      },
+      {
         path: "/malo/edit/:modelId",
         name: "MaloCreate",
         props: true,
         component: () => import("../views/Malo/MaloEdit.vue"),
+      },
+      {
+        path: "/malo/edit/:modelId/:id",
+        name: "MaloEdit",
+        props: true,
+        component: () => import("../views/Malo/MaloEdit.vue"),
+      },
+      {
+        path: "/evaluate",
+        name: "Evaluate",
+        component: () => import("../views/Evaluate/Index.vue"),
       },
     ],
   },

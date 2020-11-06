@@ -15,6 +15,8 @@
           <HeatMapOutlined v-if="index == 3" />
           <ReconciliationOutlined v-if="index == 4" />
           <ApartmentOutlined v-if="index == 5" />
+          <SettingOutlined v-if="index == 6" />
+          <MoneyCollectOutlined v-if="index == 7" />
           <span>{{ item }}</span>
         </a-menu-item>
       </a-menu>
@@ -82,8 +84,10 @@ import {
   AndroidOutlined,
   BarsOutlined,
   HeatMapOutlined,
+  SettingOutlined,
   ReconciliationOutlined,
   ApartmentOutlined,
+  MoneyCollectOutlined,
 } from "@ant-design/icons-vue";
 import store from "@/store";
 import { useRouter } from "vue-router";
@@ -102,6 +106,8 @@ export default defineComponent({
     HeatMapOutlined,
     ReconciliationOutlined,
     ApartmentOutlined,
+    SettingOutlined,
+    MoneyCollectOutlined,
   },
   setup() {
     const collapsed = ref(false);
@@ -114,6 +120,8 @@ export default defineComponent({
       "brand",
       "model",
       "malfunction",
+      "malo",
+      "evaluate",
     ]);
     const routerData = ref([
       "/",
@@ -122,6 +130,8 @@ export default defineComponent({
       "/brand",
       "/model",
       "/malfunction",
+      "/malo",
+      "/evaluate",
     ]);
     const user = computed(() => store.state.login.user);
     const routerPush = (path: string) => {

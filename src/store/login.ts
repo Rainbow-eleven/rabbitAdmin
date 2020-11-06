@@ -3,6 +3,7 @@ import axios from "axios";
 import { message } from "ant-design-vue";
 import { ActionContext, Module } from "vuex";
 import { ActionMutationsProp } from "./user";
+import { AppoProp } from "./appointment";
 export interface LoginInfo {
   account: string;
   password: string;
@@ -19,6 +20,7 @@ export interface UserInfo {
   faceUrl?: string;
   createdTime?: string;
   updatedTime?: string;
+  appointments?: AppoProp[];
 }
 export interface GlobalLoginStore {
   fromInput: LoginInfo;

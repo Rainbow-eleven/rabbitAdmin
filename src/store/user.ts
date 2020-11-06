@@ -37,8 +37,8 @@ export interface PasswordProp {
   pass: string;
 }
 export interface PaginationProp {
-  pageSize: number;
-  total: number;
+  pageSize?: number;
+  total?: number;
   current?: number;
   hideOnSinglePage?: boolean;
   simple?: boolean;
