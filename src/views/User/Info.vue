@@ -10,7 +10,7 @@
           class="avatar-uploader"
           :show-upload-list="false"
           :headers="HeaderStatus"
-          action="http://127.0.0.1:3000/upload"
+          :action="uploadUrl"
           :before-upload="beforeUpload"
           @change="handleChange"
         >
@@ -82,6 +82,7 @@ export default defineComponent({
   },
   setup(props) {
     const user = computed(() => store.state.user.user);
+    const uploadUrl = computed(() => store.state.login.uploadUrl);
     const backToGo = () => {
       store.commit("BackToGo");
     };
@@ -155,6 +156,7 @@ export default defineComponent({
       handleChange,
       beforeUpload,
       deleteUser,
+      uploadUrl,
     };
   },
 });

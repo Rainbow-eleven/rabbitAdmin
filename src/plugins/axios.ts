@@ -1,6 +1,6 @@
 import { message } from "ant-design-vue";
 import axios from "axios";
-axios.defaults.baseURL = "http://192.168.1.101:3000";
+axios.defaults.baseURL = "http://123.56.59.201/";
 import store from "../store/index";
 // 添加请求拦截器
 axios.interceptors.request.use(
